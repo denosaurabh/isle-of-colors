@@ -1,6 +1,8 @@
 import { useComponentValue } from "@latticexyz/react";
 import { useMUD } from "./MUDContext";
 
+import "./index.css";
+
 export const App = () => {
   const {
     components: { Counter },
@@ -12,9 +14,10 @@ export const App = () => {
 
   return (
     <>
-      <div>
+      <h1 className="text-3xl font-bold underline">
         Counter: <span>{counter?.value ?? "??"}</span>
-      </div>
+      </h1>
+
       <button
         type="button"
         onClick={async (event) => {
