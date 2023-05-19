@@ -45,7 +45,7 @@ export const Character = () => {
 
   const characterRef = useRef();
 
-  const { position } = useSnapshot(characterState);
+  const { position, allowUpdate } = useSnapshot(characterState);
 
   const keysdown = useKeyboard();
 
@@ -110,10 +110,12 @@ export const Character = () => {
         refState.current.grounded = controller.current.computedGrounded();
 
         const correctedMovement = controller.current.computedMovement();
-        position.add(vec3(correctedMovement));
+        
 
-        updateCharacterPosition([position.x, position.y, position.z]);
-
+        if (allowUpdate) {
+          position.add(vec3(correctedMovement));
+          updateCharacterPosition([position.x, position.y, position.z]);
+        }
         body.current.setNextKinematicTranslation(position);
       } catch (err) {
         console.log("error updating character position");

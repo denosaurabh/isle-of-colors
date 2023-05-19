@@ -8,7 +8,7 @@ import { cameraState } from "../state/camera";
 export const Camera = () => {
   const cameraControlRef = useRef();
 
-  const { position } = useSnapshot(characterState);
+  const { position, allowUpdate } = useSnapshot(characterState);
   const { disableControls } = useSnapshot(cameraState);
 
   useFrame(() => {

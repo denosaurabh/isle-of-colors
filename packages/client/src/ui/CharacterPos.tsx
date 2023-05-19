@@ -1,7 +1,6 @@
 import { useComponentValue, useEntityQuery } from "@latticexyz/react";
 import { useMUD } from "../MUDContext";
-import { characterState, updateCharacterPosition } from "../state/character";
-import { useSnapshot } from "valtio";
+import { allowUpdate, characterState, updateCharacterPosition } from "../state/character";
 import { useEffect, useRef, useState } from "react";
 import { Has, getComponentValueStrict } from "@latticexyz/recs";
 
@@ -67,6 +66,8 @@ export const CharacterPos = () => {
           0,
           loadedPlayerData["z"],
         ]);
+
+        allowUpdate(true);
       }
       // else {
       //   addCharacterMud(0, 0);
