@@ -1,4 +1,4 @@
-import { Edges, useGLTF } from "@react-three/drei";
+import { Edges, GradientTexture, useGLTF } from "@react-three/drei";
 import { RigidBody } from "@react-three/rapier";
 
 type ModelProps = {
@@ -42,8 +42,20 @@ export const Model = ({ id, url, color = "#059669", ...props }: ModelProps) => {
               <meshPhongMaterial color={color} />
 
               <Edges scale={1} renderOrder={1}>
-                {/* <meshPhongMaterial color={color} /> */}
+                <meshPhongMaterial color="#333" />
               </Edges>
+
+              {/* <meshPhongMaterial color={color} /> */}
+
+              {/* <Edges scale={1} renderOrder={1}>
+                <meshPhongMaterial>
+                  <GradientTexture
+                    stops={[0, 1]} // As many stops as you want
+                    colors={["#de9954", "#d1b07d"]} // Colors need to match the number of stops
+                    size={1024} // Size is optional, default = 1024
+                  />
+                </meshPhongMaterial>
+              </Edges> */}
             </mesh>
           );
         })}
