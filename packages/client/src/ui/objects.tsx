@@ -1,6 +1,6 @@
 import { OBJECTS_DATA } from "../data/objects";
 
-export const Objects = () => {
+export const ObjectsSidebar = () => {
   return (
     <div className="fixed top-2 left-2 w-[100px] h-[98vh] p-2 rounded-lg bg-slate-800 bg-opacity-25 backdrop-blur-md">
       <div className="rounded-lg bg-slate-700 flex flex-col gap-2 p-1.5 bg-opacity-70">

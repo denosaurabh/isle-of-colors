@@ -1,12 +1,14 @@
 import { CharacterPos } from "./CharacterPos";
-import { Objects } from "./objects";
+import { Footer } from "./footer";
+import { ObjectsSidebar } from "./objects";
 
 export const UI = () => {
   return (
     <>
       <CharacterPos />
 
-      <Objects />
+      <ObjectsSidebar />
+      <Footer />
     </>
   );
 };
