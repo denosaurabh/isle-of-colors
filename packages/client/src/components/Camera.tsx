@@ -27,8 +27,8 @@ export const Camera = () => {
       <CameraControls
         ref={cameraControlRef}
         enabled={!disableControls}
-        minZoom={20}
-        maxZoom={70}
+        minZoom={25}
+        maxZoom={60}
         maxPolarAngle={Math.PI / 3.5}
       />
     </>
