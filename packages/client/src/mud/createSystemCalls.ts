@@ -19,8 +19,8 @@ export function createSystemCalls(
     return getComponentValue(Counter, singletonEntity);
   };
 
-  const addCharacterMud = async () => {
-    await worldSend("addCharacterMud", []);
+  const addCharacterMud = async (x: number, z: number) => {
+    await worldSend("addCharacterMud", [x, z]);
   };
 
   const updateCharacterPositionMud = async (

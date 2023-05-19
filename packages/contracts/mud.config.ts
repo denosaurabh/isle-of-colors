@@ -9,8 +9,19 @@ export default mudConfig({
     Character: {
       schema: {
         x: "int32",
-        z: "int32"
+        z: "int32",
       },
+    },
+    Building: {
+      schema: {
+        x: "int32",
+        z: "int32",
+        rotation: "int32",
+        id: "string",
+      },
+      // Array of objects
+      // colors : [
+      //   {
     },
   },
   modules: [

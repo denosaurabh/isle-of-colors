@@ -36,5 +36,23 @@ export function defineContractComponents(world: World) {
         }
       );
     })(),
+    Building: (() => {
+      const tableId = new TableId("", "Building");
+      return defineComponent(
+        world,
+        {
+          x: RecsType.Number,
+          z: RecsType.Number,
+          rotation: RecsType.Number,
+          id: RecsType.String,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHexString(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
   };
 }

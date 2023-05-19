@@ -5,3 +5,4 @@ pragma solidity >=0.8.0;
 
 import { Counter, CounterTableId } from "./tables/Counter.sol";
 import { Character, CharacterData, CharacterTableId } from "./tables/Character.sol";
+import { Building, BuildingData, BuildingTableId } from "./tables/Building.sol";

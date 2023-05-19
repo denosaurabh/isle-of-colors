@@ -9,10 +9,10 @@ import { Character, CharacterData } from "../codegen/Tables.sol";
 
 contract CharacterSystem is System {
 
-    function addCharacterMud() public {
+    function addCharacterMud(int32 x, int32 z) public {
         bytes32 owner = addressToEntity(_msgSender());
         // bytes32 id = getUniqueEntity();        
-        Character.set(owner, CharacterData({x: 0, z: 0}));
+        Character.set(owner, CharacterData({x: x, z: z}));
     }
 
     function updateCharacterPositionMud(bytes32 characterId, int32 x, int32 z) public {
