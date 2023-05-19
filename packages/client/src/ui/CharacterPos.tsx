@@ -5,7 +5,7 @@ import { useSnapshot } from "valtio";
 import { useEffect, useRef, useState } from "react";
 import { Has, getComponentValueStrict } from "@latticexyz/recs";
 
-export const UI = () => {
+export const CharacterPos = () => {
   const {
     components: { Counter, Character },
     systemCalls: {
