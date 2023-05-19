@@ -8,7 +8,9 @@ import {
   vec3,
 } from "@react-three/rapier";
 import { useEffect, useRef } from "react";
-import { updateCharacterPosition } from "../state/character";
+import { characterState, updateCharacterPosition } from "../state/character";
+import { useSnapshot } from "valtio";
+import * as THREE from "three";
 
 const useKeyboard = () => {
   const keysDown = useRef({});
@@ -41,6 +43,8 @@ export const Character = () => {
   const collider = useRef<RapierCollider>(null);
   const body = useRef<RapierRigidBody>(null);
 
+  const { position } = useSnapshot(characterState);
+
   const keysdown = useKeyboard();
 
   const refState = useRef({
@@ -57,6 +61,15 @@ export const Character = () => {
 
     controller.current = c;
   }, [rapier]);
+
+  const pos = new THREE.Vector3();
+  useEffect(() => {
+    if (body.current) {
+      body.current.setNextKinematicTranslation(
+        pos.set(position[0], 1, position[2])
+      );
+    }
+  }, [position]);
 
   useFrame((context, delta) => {
     if (controller.current && body.current && collider.current) {
