@@ -23,6 +23,7 @@ export const Model = ({ id, url, color = "#059669", ...props }: ModelProps) => {
       <group
         name={id}
         userData={{ draggable: true, ...userData }}
+        position-y={0.5}
         {...otherProps}
       >
         {Object.values(nodes).map((n, i) => {
@@ -41,7 +42,7 @@ export const Model = ({ id, url, color = "#059669", ...props }: ModelProps) => {
               <meshPhongMaterial color={color} />
 
               <Edges scale={1} renderOrder={1}>
-                <meshPhongMaterial />
+                {/* <meshPhongMaterial color={color} /> */}
               </Edges>
             </mesh>
           );

@@ -29,6 +29,7 @@
     "@wagmi/chains": "^0.2.22",
     "contracts": "workspace:*",
     "ethers": "^5.7.2",
+    "lodash": "^4.17.21",
     "nanoid": "^4.0.2",
     "postprocessing": "^6.31.0",
     "react": "^18.2.0",
@@ -37,6 +38,7 @@
     "valtio": "^1.10.5"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.194",
     "@types/react": "^18.2.6",
     "@types/react-dom": "^18.2.4",
     "@vitejs/plugin-react": "^3.1.0",

@@ -79,6 +79,9 @@ importers:
       ethers:
         specifier: ^5.7.2
         version: 5.7.2
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
       nanoid:
         specifier: ^4.0.2
         version: 4.0.2
@@ -98,6 +101,9 @@ importers:
         specifier: ^1.10.5
         version: 1.10.5(react@18.2.0)
     devDependencies:
+      '@types/lodash':
+        specifier: ^4.14.194
+        version: 4.14.194
       '@types/react':
         specifier: ^18.2.6
         version: 18.2.6
@@ -1710,6 +1716,10 @@ packages:
 
   /@types/json-schema@7.0.11:
     resolution: {integrity: sha512-wOuvG1SN4Us4rez+tylwwwCV1psiNVOkJeM3AUWUNWg/jDQY2+HE/444y5gc+jBmRqASOm2Oeh5c1axHobwRKQ==}
+    dev: true
+
+  /@types/lodash@4.14.194:
+    resolution: {integrity: sha512-r22s9tAS7imvBt2lyHC9B8AGwWnXaYb1tY09oyLkXDs4vArpYJzw09nj8MLx5VfciBPGIb+ZwG0ssYnEPJxn/g==}
     dev: true
 
   /@types/node@18.15.11:
