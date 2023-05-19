@@ -5,6 +5,10 @@ import { SetupNetworkResult } from "./setupNetwork";
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
+const entityToBytes32 = (entity: string) => {
+  return "0x" + entity.replace("0x", "").padStart(64, "0");
+};
+
 export function createSystemCalls(
   { worldSend, txReduced$, singletonEntity }: SetupNetworkResult,
   { Counter }: ClientComponents
@@ -15,7 +19,20 @@ export function createSystemCalls(
     return getComponentValue(Counter, singletonEntity);
   };
 
+  const addCharacterMud = async () => {
+    await worldSend("addCharacterMud", []);
+  };
+
+  const updateCharacterPositionMud = async (
+    id: string,
+    x: number,
+    z: number
+  ) => {
+    await worldSend("updateCharacterPositionMud", [entityToBytes32(id), x, z]);
+  };
   return {
     increment,
+    addCharacterMud,
+    updateCharacterPositionMud,
   };
 }
