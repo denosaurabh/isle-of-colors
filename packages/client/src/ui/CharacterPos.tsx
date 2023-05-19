@@ -1,6 +1,10 @@
 import { useComponentValue, useEntityQuery } from "@latticexyz/react";
 import { useMUD } from "../MUDContext";
-import { allowUpdate, characterState, updateCharacterPosition } from "../state/character";
+import {
+  allowUpdate,
+  characterState,
+  updateCharacterPosition,
+} from "../state/character";
 import { useEffect, useRef, useState } from "react";
 import { Has, getComponentValueStrict } from "@latticexyz/recs";
 
@@ -94,21 +98,5 @@ export const CharacterPos = () => {
   }, [currentCharacterId]);
 
   // updatePosition(position);
-  return (
-    <>
-      <h1 className="text-3xl font-bold underline">
-        Counter: <span>{counter?.value ?? "??"}</span>
-      </h1>
-
-      <button
-        type="button"
-        onClick={async (event) => {
-          event.preventDefault();
-          console.log("new counter value:", await increment());
-        }}
-      >
-        Increment
-      </button>
-    </>
-  );
+  return <></>;
 };
