@@ -23,4 +23,8 @@ contract CharacterSystem is System {
         Character.set(characterId, CharacterData({x : x, z : z}));
         // Character.setX(characterId, z);
     }
+
+    function getCurrentCharacterIdMud() public view returns (bytes32) {
+        return addressToEntity(_msgSender());
+    }
 }

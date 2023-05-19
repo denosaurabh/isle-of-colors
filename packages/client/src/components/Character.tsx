@@ -19,7 +19,7 @@ const useKeyboard = () => {
     const handleKeyDown = (event: KeyboardEvent) => {
       keysDown.current[event.key] = true;
 
-      console.log(event.key);
+      // console.log(event.key);
     };
     const handleKeyUp = (event: KeyboardEvent) => {
       keysDown.current[event.key] = false;
@@ -43,6 +43,8 @@ export const Character = () => {
   const collider = useRef<RapierCollider>(null);
   const body = useRef<RapierRigidBody>(null);
 
+  const characterRef = useRef();
+
   const { position } = useSnapshot(characterState);
 
   const keysdown = useKeyboard();
@@ -63,11 +65,10 @@ export const Character = () => {
   }, [rapier]);
 
   const pos = new THREE.Vector3();
+
   useEffect(() => {
     if (body.current) {
-      body.current.setNextKinematicTranslation(
-        pos.set(position[0], 1, position[2])
-      );
+      body.current.setTranslation(pos.set(position[0], 1, position[2]), true);
     }
   }, [position]);
 
@@ -127,7 +128,7 @@ export const Character = () => {
       ref={body}
       position={[0, 10, 0]}
     >
-      <mesh name="character">
+      <mesh name="character" ref={characterRef}>
         <boxGeometry args={[0.5, 1, 0.3]} />
         <meshBasicMaterial color="black" />
       </mesh>

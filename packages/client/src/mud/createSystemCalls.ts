@@ -30,9 +30,15 @@ export function createSystemCalls(
   ) => {
     await worldSend("updateCharacterPositionMud", [entityToBytes32(id), x, z]);
   };
+
+  const getCurrentCharacterIdMud = () => {
+    return worldSend("getCurrentCharacterIdMud", []);
+  };
+
   return {
     increment,
     addCharacterMud,
     updateCharacterPositionMud,
+    getCurrentCharacterIdMud,
   };
 }

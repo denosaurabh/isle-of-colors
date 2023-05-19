@@ -2,13 +2,18 @@ import { useComponentValue, useEntityQuery } from "@latticexyz/react";
 import { useMUD } from "../MUDContext";
 import { characterState, updateCharacterPosition } from "../state/character";
 import { useSnapshot } from "valtio";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Has, getComponentValueStrict } from "@latticexyz/recs";
 
 export const UI = () => {
   const {
     components: { Counter, Character },
-    systemCalls: { increment, addCharacterMud, updateCharacterPositionMud },
+    systemCalls: {
+      increment,
+      addCharacterMud,
+      updateCharacterPositionMud,
+      getCurrentCharacterIdMud,
+    },
     network: { singletonEntity },
   } = useMUD();
 
@@ -21,42 +26,66 @@ export const UI = () => {
   // const { position } = useSnapshot(characterState);
 
   const characterIds = useEntityQuery([Has(Character)]);
-  // console.log("characterIds", characterIds);
-  // playerIds.map((id) => {
-  //   const loadedPlayerData = getComponentValueStrict(Player, id);
-  //   console.log("loadedPlayerData", loadedPlayerData);
-  // });
-  // const loadedPlayerData = getComponentValueStrict
-  // updateCharacterPosition
+  const [currentCharacterId, setcurrentCharacterId] = useState(null);
 
-  const characterData = useComponentValue(Character, characterIds[0]);
   useEffect(() => {
-    console.log("characterData", characterData);
-    if (characterData) {
-      console.log("characterData", characterData);
-      updateCharacterPosition([characterData["x"], 0, characterData["z"]]);
-    }
-  }, [characterData]);
+    const getCharacterId = async () => {
+      const currentCharacterId = await getCurrentCharacterIdMud();
+      if (currentCharacterId) {
+        setcurrentCharacterId(currentCharacterId?.["hash"]);
+      }
+    };
 
+    getCharacterId();
+  }, []);
+
+  // console.log("currentCharacterId", currentCharacterId);
+  // console.log("characterIds", characterIds);
+  // characterIds.map((id) => {
+    // const loadedPlayerData = getComponentValueStrict(Character, id);
+    // console.log("loadedPlayerData", id, loadedPlayerData);
+  // });
+
+  // const updated = useRef(false);
   // useEffect(() => {
-  //   addCharacterMud();
-  // }, []);
+  //   if (!updated.current) {
+  //     // console.log("characterData", characterData);
+  //     const loadedPlayerData = getComponentValueStrict(
+  //       Character,
+  //       currentCharacterId
+  //     );
+  //     updateCharacterPosition([
+  //       loadedPlayerData["x"],
+  //       0,
+  //       loadedPlayerData["z"],
+  //     ]);
+
+  //     updated.current = true;
+  //   }
+  // }, [currentCharacterId]);
+
+  // TODO : Only needed if the character get's removed from chain once it's logged out
+  useEffect(() => {
+    // if (characterIds.length !== 0) && (characterIds.includes(currentCharacterId)){
+    addCharacterMud();
+  }, []);
 
   // Debounce position updates
   useEffect(() => {
     const subId = setInterval(() => {
-      // console.log(characterState.position);
-      // updateCharacterPositionMud(
-      //   characterIds[0],
-      //   Math.floor(characterState.position[0]),
-      //   Math.floor(characterState.position[2])
-      // );
+      if (currentCharacterId) {
+        updateCharacterPositionMud(
+          currentCharacterId,
+          Math.floor(characterState.position[0]),
+          Math.floor(characterState.position[2])
+        );
+      }
     }, 1000);
 
     return () => {
       clearInterval(subId);
     };
-  }, [characterIds]);
+  }, [currentCharacterId]);
 
   // updatePosition(position);
   return (

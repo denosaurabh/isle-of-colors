@@ -7,4 +7,6 @@ interface ICharacterSystem {
   function addCharacterMud() external;
 
   function updateCharacterPositionMud(bytes32 characterId, int32 x, int32 z) external;
+
+  function getCurrentCharacterIdMud() external view returns (bytes32);
 }
