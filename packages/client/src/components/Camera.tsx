@@ -29,6 +29,7 @@ export const Camera = () => {
         enabled={!disableControls}
         minZoom={20}
         maxZoom={70}
+        maxPolarAngle={Math.PI / 3.5}
       />
     </>
   );
