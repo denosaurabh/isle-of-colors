@@ -6,7 +6,9 @@ pragma solidity >=0.8.0;
 interface ICharacterSystem {
   function addCharacterMud(int32 x, int32 z) external;
 
-  function updateCharacterPositionMud(bytes32 characterId, int32 x, int32 z) external;
+  function updateCharacterPositionMud(bytes32 characterId, int32 x, int32 z, bool isOnline) external;
 
   function getCurrentCharacterIdMud() external view returns (bytes32);
+
+  function updateCharacterOnlineStatusMud(bytes32 characterId, bool isOnline) external;
 }

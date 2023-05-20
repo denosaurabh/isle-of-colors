@@ -26,9 +26,10 @@ export function createSystemCalls(
   const updateCharacterPositionMud = async (
     id: string,
     x: number,
-    z: number
+    z: number,
+    isOnline: boolean
   ) => {
-    await worldSend("updateCharacterPositionMud", [entityToBytes32(id), x, z]);
+    await worldSend("updateCharacterPositionMud", [entityToBytes32(id), x, z, isOnline]);
   };
 
   const getCurrentCharacterIdMud = () => {

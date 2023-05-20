@@ -27,6 +27,7 @@ export function defineContractComponents(world: World) {
         {
           x: RecsType.Number,
           z: RecsType.Number,
+          isOnline: RecsType.Boolean,
         },
         {
           metadata: {

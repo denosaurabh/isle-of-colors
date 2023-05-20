@@ -10,6 +10,7 @@ export default mudConfig({
       schema: {
         x: "int32",
         z: "int32",
+        isOnline: "bool",
       },
     },
     Building: {

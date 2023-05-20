@@ -23,14 +23,16 @@ bytes32 constant CharacterTableId = _tableId;
 struct CharacterData {
   int32 x;
   int32 z;
+  bool isOnline;
 }
 
 library Character {
   /** Get the table's schema */
   function getSchema() internal pure returns (Schema) {
-    SchemaType[] memory _schema = new SchemaType[](2);
+    SchemaType[] memory _schema = new SchemaType[](3);
     _schema[0] = SchemaType.INT32;
     _schema[1] = SchemaType.INT32;
+    _schema[2] = SchemaType.BOOL;
 
     return SchemaLib.encode(_schema);
   }
@@ -44,9 +46,10 @@ library Character {
 
   /** Get the table's metadata */
   function getMetadata() internal pure returns (string memory, string[] memory) {
-    string[] memory _fieldNames = new string[](2);
+    string[] memory _fieldNames = new string[](3);
     _fieldNames[0] = "x";
     _fieldNames[1] = "z";
+    _fieldNames[2] = "isOnline";
     return ("Character", _fieldNames);
   }
 
@@ -140,6 +143,40 @@ library Character {
     _store.setField(_tableId, _keyTuple, 1, abi.encodePacked((z)));
   }
 
+  /** Get isOnline */
+  function getIsOnline(bytes32 key) internal view returns (bool isOnline) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 2);
+    return (_toBool(uint8(Bytes.slice1(_blob, 0))));
+  }
+
+  /** Get isOnline (using the specified store) */
+  function getIsOnline(IStore _store, bytes32 key) internal view returns (bool isOnline) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    bytes memory _blob = _store.getField(_tableId, _keyTuple, 2);
+    return (_toBool(uint8(Bytes.slice1(_blob, 0))));
+  }
+
+  /** Set isOnline */
+  function setIsOnline(bytes32 key, bool isOnline) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    StoreSwitch.setField(_tableId, _keyTuple, 2, abi.encodePacked((isOnline)));
+  }
+
+  /** Set isOnline (using the specified store) */
+  function setIsOnline(IStore _store, bytes32 key, bool isOnline) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    _store.setField(_tableId, _keyTuple, 2, abi.encodePacked((isOnline)));
+  }
+
   /** Get the full data */
   function get(bytes32 key) internal view returns (CharacterData memory _table) {
     bytes32[] memory _keyTuple = new bytes32[](1);
@@ -159,8 +196,8 @@ library Character {
   }
 
   /** Set the full data using individual values */
-  function set(bytes32 key, int32 x, int32 z) internal {
-    bytes memory _data = encode(x, z);
+  function set(bytes32 key, int32 x, int32 z, bool isOnline) internal {
+    bytes memory _data = encode(x, z, isOnline);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
@@ -169,8 +206,8 @@ library Character {
   }
 
   /** Set the full data using individual values (using the specified store) */
-  function set(IStore _store, bytes32 key, int32 x, int32 z) internal {
-    bytes memory _data = encode(x, z);
+  function set(IStore _store, bytes32 key, int32 x, int32 z, bool isOnline) internal {
+    bytes memory _data = encode(x, z, isOnline);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
@@ -180,12 +217,12 @@ library Character {
 
   /** Set the full data using the data struct */
   function set(bytes32 key, CharacterData memory _table) internal {
-    set(key, _table.x, _table.z);
+    set(key, _table.x, _table.z, _table.isOnline);
   }
 
   /** Set the full data using the data struct (using the specified store) */
   function set(IStore _store, bytes32 key, CharacterData memory _table) internal {
-    set(_store, key, _table.x, _table.z);
+    set(_store, key, _table.x, _table.z, _table.isOnline);
   }
 
   /** Decode the tightly packed blob using this table's schema */
@@ -193,11 +230,13 @@ library Character {
     _table.x = (int32(uint32(Bytes.slice4(_blob, 0))));
 
     _table.z = (int32(uint32(Bytes.slice4(_blob, 4))));
+
+    _table.isOnline = (_toBool(uint8(Bytes.slice1(_blob, 8))));
   }
 
   /** Tightly pack full data using this table's schema */
-  function encode(int32 x, int32 z) internal view returns (bytes memory) {
-    return abi.encodePacked(x, z);
+  function encode(int32 x, int32 z, bool isOnline) internal view returns (bytes memory) {
+    return abi.encodePacked(x, z, isOnline);
   }
 
   /** Encode keys as a bytes32 array using this table's schema */
@@ -220,5 +259,11 @@ library Character {
     _keyTuple[0] = bytes32((key));
 
     _store.deleteRecord(_tableId, _keyTuple);
+  }
+}
+
+function _toBool(uint8 value) pure returns (bool result) {
+  assembly {
+    result := value
   }
 }

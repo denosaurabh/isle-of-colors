@@ -3,10 +3,12 @@ import { useMUD } from "../MUDContext";
 import {
   allowUpdate,
   characterState,
+  updateCharacterId,
   updateCharacterPosition,
 } from "../state/character";
 import { useEffect, useRef, useState } from "react";
 import { Has, getComponentValueStrict } from "@latticexyz/recs";
+import { updateNumberOfOnlineCharacters } from "../state/world";
 
 export const CharacterPos = () => {
   const {
@@ -16,11 +18,12 @@ export const CharacterPos = () => {
       addCharacterMud,
       updateCharacterPositionMud,
       getCurrentCharacterIdMud,
+      updateCharacterOnlineStatusMud,
     },
     network: { singletonEntity },
   } = useMUD();
 
-  const counter = useComponentValue(Counter, singletonEntity);
+  // const counter = useComponentValue(Counter, singletonEntity);
 
   // TODO : all users position stored but hidden ( shared encrypt setup ), only those users will see location which are closem zkp system
   // TODO : Position update function, check distance, make sure no teleportation, make sure no speed hacks, with zkp, and shared encrypt
@@ -30,6 +33,10 @@ export const CharacterPos = () => {
 
   const characterIds = useEntityQuery([Has(Character)]);
   const [currentCharacterId, setcurrentCharacterId] = useState(null);
+
+  // const updateCharacterOnlineStatus = () => {
+  //   updateCharacterOnlineStatusMud(currentCharacterId, false);
+  // };
 
   useEffect(() => {
     const getCharacterId = async () => {
@@ -45,11 +52,18 @@ export const CharacterPos = () => {
   useEffect(() => {
     const allCharactersData = {};
     if (characterIds.length !== 0) {
+      let numberOfOnlineCharacters = 0;
       characterIds.map((id) => {
         const loadedPlayerData = getComponentValueStrict(Character, id);
         // console.log("loadedPlayerData", id, loadedPlayerData);
         allCharactersData[id] = loadedPlayerData;
+
+        if (loadedPlayerData["isOnline"]) {
+          numberOfOnlineCharacters++;
+        }
       });
+
+      updateNumberOfOnlineCharacters(numberOfOnlineCharacters);
     }
     // console.log("allCharactersData", allCharactersData);
   }, [characterIds]);
@@ -58,6 +72,7 @@ export const CharacterPos = () => {
   // TODO : Multiple players seems to remove the character each other states
   const updated = useRef(false);
   useEffect(() => {
+    console.log(currentCharacterId, characterIds, updated.current);
     if (currentCharacterId && characterIds.length !== 0 && !updated.current) {
       if (characterIds.includes(currentCharacterId.toLowerCase())) {
         const loadedPlayerData = getComponentValueStrict(
@@ -72,22 +87,26 @@ export const CharacterPos = () => {
         ]);
 
         allowUpdate(true);
+        updated.current = true;
+      } else {
+        addCharacterMud(0, 0);
+        allowUpdate(true);
+        updated.current = true;
       }
-      // else {
-      //   addCharacterMud(0, 0);
-      // }
-      updated.current = true;
     }
   }, [currentCharacterId, characterIds]);
 
   // Debounce position updates
   useEffect(() => {
     const subId = setInterval(() => {
-      if (currentCharacterId) {
+      if (currentCharacterId && updated.current) {
+        // updateCharacterId(currentCharacterId.toLowerCase());
+
         updateCharacterPositionMud(
           currentCharacterId,
           Math.floor(characterState.position[0]),
-          Math.floor(characterState.position[2])
+          Math.floor(characterState.position[2]),
+          true
         );
       }
     }, 1000);
@@ -95,7 +114,7 @@ export const CharacterPos = () => {
     return () => {
       clearInterval(subId);
     };
-  }, [currentCharacterId]);
+  }, [currentCharacterId, updated]);
 
   // updatePosition(position);
   return <></>;
