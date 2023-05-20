@@ -1,12 +1,10 @@
 import { Canvas } from "@react-three/fiber";
-import { Suspense, useEffect } from "react";
+import { Suspense } from "react";
 import { Physics } from "@react-three/rapier";
 import { EffectComposer, Noise, Vignette } from "@react-three/postprocessing";
-import { KeyboardControls, PerformanceMonitor } from "@react-three/drei";
+import { KeyboardControls } from "@react-three/drei";
 
 import { UI } from "./ui";
-import { useMUD } from "./MUDContext";
-import { characterState } from "./state/character";
 
 import { Perf } from "r3f-perf";
 
