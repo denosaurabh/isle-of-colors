@@ -7,6 +7,7 @@ import { Light } from "./components/Light";
 import { WorldObjects } from "./components/WorldObjects";
 
 import "./index.css";
+import { PointLight } from "./components/PointLight";
 
 export const App = () => {
   return (
@@ -16,6 +17,7 @@ export const App = () => {
       <Character />
       <Light />
       <Sky />
+      <PointLight />
 
       <WorldObjects />
       <DraftObjects />

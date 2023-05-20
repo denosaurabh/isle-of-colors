@@ -110,7 +110,6 @@ export const Character = () => {
         refState.current.grounded = controller.current.computedGrounded();
 
         const correctedMovement = controller.current.computedMovement();
-        
 
         if (allowUpdate) {
           position.add(vec3(correctedMovement));

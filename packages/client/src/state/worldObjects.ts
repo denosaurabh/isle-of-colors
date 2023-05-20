@@ -8,7 +8,7 @@ type WorldObjectColor = {
   amount: number;
 };
 
-type WorldObject = {
+export type WorldObject = {
   id: string;
   modelUrl: string;
 
