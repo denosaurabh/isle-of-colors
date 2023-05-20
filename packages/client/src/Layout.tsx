@@ -2,11 +2,13 @@ import { Canvas } from "@react-three/fiber";
 import { Suspense, useEffect } from "react";
 import { Physics } from "@react-three/rapier";
 import { EffectComposer, Noise, Vignette } from "@react-three/postprocessing";
-import { KeyboardControls } from "@react-three/drei";
+import { KeyboardControls, PerformanceMonitor } from "@react-three/drei";
 
 import { UI } from "./ui";
 import { useMUD } from "./MUDContext";
 import { characterState } from "./state/character";
+
+import { Perf } from "r3f-perf";
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   // const {
@@ -41,6 +43,8 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
           orthographic
           camera={{ position: [10, 10, 10], zoom: 50, near: 0.0, far: 200 }}
         >
+          <Perf position="top-left" />
+
           <color attach="background" args={["#d0d0d0"]} />
 
           <Suspense>
