@@ -4,14 +4,29 @@ import { Ocean } from "react-three-ocean";
 
 import { Ice } from "./Ice";
 import * as THREE from "three";
-import { Reflector } from "@react-three/drei";
+import { Reflector, useTexture } from "@react-three/drei";
 
 export const Ground = () => {
+  // const texture = useTexture("/ground.jpg");
+
+  // texture.wrapS = THREE.RepeatWrapping;
+  // texture.wrapT = THREE.RepeatWrapping;
+
+  // texture.offset.set(0, 0);
+  // texture.repeat.set(20, 20);
+
   return (
     <RigidBody type="fixed" colliders="hull">
       <mesh userData={{ ground: true }} position={[0, 0, 0]} receiveShadow>
         <boxGeometry args={[200, 0, 200]} />
         <meshPhongMaterial color="#999" />
+
+        {/* <meshStandardMaterial
+          // color="#999"
+          // map
+          // map={texture}
+          // {...props}
+        /> */}
       </mesh>
     </RigidBody>
   );

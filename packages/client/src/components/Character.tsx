@@ -37,6 +37,10 @@ const useKeyboard = () => {
   return keysDown;
 };
 
+const walkDirection = new THREE.Vector3();
+const rotateAngle = new THREE.Vector3(0, 1, 0);
+const rotateQuarternion: THREE.Quaternion = new THREE.Quaternion();
+
 export const Character = () => {
   const rapier = useRapier();
   const controller = useRef();
@@ -72,26 +76,75 @@ export const Character = () => {
     }
   }, [position]);
 
-  useFrame((context, delta) => {
+  useFrame(({ camera }, delta) => {
     if (controller.current && body.current && collider.current) {
       try {
         const { velocity } = refState.current;
 
+        // is idle
+        if (
+          !keysdown.current.w &&
+          !keysdown.current.a &&
+          !keysdown.current.s &&
+          !keysdown.current.d
+          // &&
+          // !keysdown.current.w &&
+          // !keysdown.current.w &&
+          // !keysdown.current.w &&
+          // !keysdown.current.w
+        ) {
+          return;
+        }
+
         const position = vec3(body.current.translation());
         const movement = vec3();
 
-        if (keysdown.current.ArrowUp) {
-          movement.z -= 0.07;
-        }
-        if (keysdown.current.ArrowDown) {
-          movement.z += 0.07;
-        }
-        if (keysdown.current.ArrowLeft) {
-          movement.x -= 0.07;
-        }
-        if (keysdown.current.ArrowRight) {
-          movement.x += 0.07;
-        }
+        /// movement code
+        const angleYCameraDirection = Math.atan2(
+          camera.position.x - position.x,
+          camera.position.z - position.z
+        );
+
+        // diagonal movement angle offset
+        const directionOffset = directionOffsetFn(keysdown.current);
+
+        // rotate model
+        rotateQuarternion.setFromAxisAngle(
+          rotateAngle,
+          angleYCameraDirection + directionOffset
+        );
+        // TODO:
+        characterRef.current.quaternion.rotateTowards(rotateQuarternion, 0.2);
+
+        // calculate direction
+        camera.getWorldDirection(walkDirection);
+        walkDirection.y = 0;
+        walkDirection.normalize();
+        walkDirection.applyAxisAngle(rotateAngle, directionOffset);
+
+        // run/walk velocity
+        // const velocity =
+        // this.currentAction == "Run" ? this.runVelocity : this.walkVelocity;
+        const local_velocity = 7;
+
+        // move model & camera
+        const moveX = walkDirection.x * local_velocity * delta;
+        const moveZ = walkDirection.z * local_velocity * delta;
+
+        movement.set(moveX, 0, moveZ);
+
+        // if (keysdown.current.ArrowUp || keysdown.current.w) {
+        //   movement.z -= 0.07;
+        // }
+        // if (keysdown.current.ArrowDown || keysdown.current.s) {
+        //   movement.z += 0.07;
+        // }
+        // if (keysdown.current.ArrowLeft || keysdown.current.a) {
+        //   movement.x -= 0.07;
+        // }
+        // if (keysdown.current.ArrowRight || keysdown.current.d) {
+        //   movement.x += 0.07;
+        // }
 
         if (refState.current.grounded && keysdown.current[" "]) {
           velocity.y = 0.2;
@@ -138,4 +191,32 @@ export const Character = () => {
       <CuboidCollider args={[0.25, 0.5, 0.15]} ref={collider} />
     </RigidBody>
   );
+};
+
+const directionOffsetFn = (keysPressed) => {
+  let directionOffset = 0; // w
+
+  // console.log(keysPressed.)
+
+  if (keysPressed.w) {
+    if (keysPressed.a) {
+      directionOffset = Math.PI / 4; // w+a
+    } else if (keysPressed.d) {
+      directionOffset = -Math.PI / 4; // w+d
+    }
+  } else if (keysPressed.s) {
+    if (keysPressed.a) {
+      directionOffset = Math.PI / 4 + Math.PI / 2; // s+a
+    } else if (keysPressed.d) {
+      directionOffset = -Math.PI / 4 - Math.PI / 2; // s+d
+    } else {
+      directionOffset = Math.PI; // s
+    }
+  } else if (keysPressed.a) {
+    directionOffset = Math.PI / 2; // a
+  } else if (keysPressed.d) {
+    directionOffset = -Math.PI / 2; // d
+  }
+
+  return directionOffset;
 };
