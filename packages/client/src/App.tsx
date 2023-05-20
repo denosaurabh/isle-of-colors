@@ -5,7 +5,7 @@ import { Camera } from "./components/Camera";
 import { Character } from "./components/Character";
 import { DraftObjects } from "./components/DraftObjects";
 import { Ground } from "./components/Ground";
-import { Light } from "./components/Light";
+import { Sun } from "./components/Sun";
 import { WorldObjects } from "./components/WorldObjects";
 
 import { CharacterPos } from "./data/CharacterPos";
@@ -19,7 +19,7 @@ export const App = () => {
       <Camera />
       <Ground />
       <Character />
-      <Light />
+      <Sun />
       <Sky />
       <PointLight />
       <Players />

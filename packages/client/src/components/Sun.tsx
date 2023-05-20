@@ -2,11 +2,13 @@ import { useFrame } from "@react-three/fiber";
 import { memo, useRef } from "react";
 import { DirectionalLight } from "three";
 import * as THREE from "three";
-import { updateWorldSunAngle } from "../state/world";
+import {
+  calculateNormalizedVector,
+  lerpNumber,
+  updateWorldSunAngle,
+} from "../state/world";
 
-const DAY_NIGHT_CYCLE_SECONDS = 100;
-
-export const Light = memo(() => {
+export const Sun = memo(() => {
   // const { position } = useSnapshot(characterState);
 
   const directonalLightRef = useRef<DirectionalLight>();
@@ -75,38 +77,4 @@ export const Light = memo(() => {
   );
 });
 
-Light.displayName = "Light";
-
-function calculateNormalizedVector(angleInDegrees: number) {
-  const angleInRadians = angleInDegrees * (Math.PI / 180);
-  const x = Math.cos(angleInRadians);
-  const y = Math.sin(angleInRadians);
-  const length = Math.sqrt(x * x + y * y);
-  const normalizedVector = [x / length, y / length];
-
-  return normalizedVector;
-}
-
-function lerpNumber(angle: number) {
-  let normalizedIntensity;
-
-  // Ensure the angle is between 0 and 360
-  angle = angle % 360;
-  if (angle < 0) angle = 360 + angle;
-
-  if (angle <= 90) {
-    // Light intensity is 1
-    normalizedIntensity = 1;
-  } else if (angle <= 230) {
-    // Transition from 1 to 0 between 90deg and 230deg
-    normalizedIntensity = 1 - (angle - 90) / (230 - 90);
-  } else if (angle <= 340) {
-    // Light intensity is 0
-    normalizedIntensity = 0.04;
-  } else {
-    // Transition from 0 to 1 between 340deg and 360deg (same as 0deg)
-    normalizedIntensity = (angle - 340) / (360 - 340);
-  }
-
-  return normalizedIntensity;
-}
+Sun.displayName = "Light";
