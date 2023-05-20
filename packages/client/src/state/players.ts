@@ -1,11 +1,11 @@
 import { proxy } from "valtio";
 
 type Player = {
-  position: [number, number, number];
   name: string;
+  position: [number, number, number];
 };
 
-type PlayersState = {
+export type PlayersState = {
   players: Array<Player>;
 };
 

@@ -2,6 +2,7 @@ import { proxy, subscribe } from "valtio";
 import { OBJECTS_DATA } from "../data/objects";
 import { characterState } from "./character";
 import { nanoid } from "nanoid";
+import { ArrayElement } from "../utils/array";
 
 type WorldObjectColor = {
   color: string;
@@ -57,9 +58,6 @@ export const getClosestWorldObjects = (
 /* *************************************************************** */
 /* *********************  USER OBJECTS STATE  ******************** */
 /* *************************************************************** */
-
-type ArrayElement<ArrayType extends readonly unknown[]> =
-  ArrayType extends readonly (infer ElementType)[] ? ElementType : never;
 
 type DraftWorldObject = {
   id: string;
