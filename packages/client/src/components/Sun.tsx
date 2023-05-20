@@ -2,6 +2,7 @@ import { useFrame } from "@react-three/fiber";
 import { memo, useRef } from "react";
 import { DirectionalLight } from "three";
 import * as THREE from "three";
+import { updateWorldSunAngle } from "../state/world";
 
 const DAY_NIGHT_CYCLE_SECONDS = 100;
 
@@ -16,13 +17,15 @@ export const Light = memo(() => {
   // const pos = new THREE.Vector3(0, 1, 0);
 
   useFrame(({ clock }) => {
-    const angle = (
-      (clock.elapsedTime % DAY_NIGHT_CYCLE_SECONDS) *
-      (360 / DAY_NIGHT_CYCLE_SECONDS)
-    ).toFixed(2);
-    // let intensity =
-    //   (clock.elapsedTime % DAY_NIGHT_CYCLE_SECONDS) *
-    //   (1 / DAY_NIGHT_CYCLE_SECONDS);
+    const angle = Number(
+      (
+        (clock.elapsedTime % DAY_NIGHT_CYCLE_SECONDS) *
+        (360 / DAY_NIGHT_CYCLE_SECONDS)
+      ).toFixed(2)
+    );
+
+    // update sun angle
+    updateWorldSunAngle(angle);
 
     const intensity = lerpNumber(angle, 230, 340);
     const normalizedVector = calculateNormalizedVector(angle);
@@ -84,7 +87,7 @@ function calculateNormalizedVector(angleInDegrees: number) {
   return normalizedVector;
 }
 
-function lerpNumber(angle: number, startAngle: number, endAngle: number) {
+function lerpNumber(angle: number) {
   let normalizedIntensity;
 
   // Ensure the angle is between 0 and 360
@@ -99,7 +102,7 @@ function lerpNumber(angle: number, startAngle: number, endAngle: number) {
     normalizedIntensity = 1 - (angle - 90) / (230 - 90);
   } else if (angle <= 340) {
     // Light intensity is 0
-    normalizedIntensity = 0;
+    normalizedIntensity = 0.04;
   } else {
     // Transition from 0 to 1 between 340deg and 360deg (same as 0deg)
     normalizedIntensity = (angle - 340) / (360 - 340);
