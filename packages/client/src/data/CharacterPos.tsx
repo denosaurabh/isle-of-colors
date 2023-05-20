@@ -12,6 +12,7 @@ import {
   updateIsChainReady,
   updateNumberOfOnlineCharacters,
 } from "../state/world";
+import { updatePlayers } from "../state/players";
 
 export const CharacterPos = () => {
   const {
@@ -27,7 +28,7 @@ export const CharacterPos = () => {
   } = useMUD();
 
   const counter = useComponentValue(Counter, singletonEntity);
-  console.log("counter", counter);
+  // console.log("counter", counter);
   useEffect(() => {
     if (counter) {
       updateIsChainReady(true);
@@ -65,15 +66,25 @@ export const CharacterPos = () => {
     const allCharactersData = {};
     if (characterIds.length !== 0) {
       let numberOfOnlineCharacters = 0;
+      const allPlayersData = [];
       characterIds.map((id) => {
         const loadedPlayerData = getComponentValueStrict(Character, id);
         // console.log("loadedPlayerData", id, loadedPlayerData);
         allCharactersData[id] = loadedPlayerData;
+        if (id !== currentCharacterId?.toLowerCase()) {
+          allPlayersData.push([
+            loadedPlayerData["x"],
+            0,
+            loadedPlayerData["z"],
+          ]);
+        }
 
         if (loadedPlayerData["isOnline"]) {
           numberOfOnlineCharacters++;
         }
       });
+
+      updatePlayers(allPlayersData);
 
       updateNumberOfOnlineCharacters(numberOfOnlineCharacters);
     }
@@ -140,7 +151,7 @@ export const CharacterPos = () => {
           true
         );
       }
-    }, 1000);
+    }, 500);
 
     return () => {
       clearInterval(subId);
