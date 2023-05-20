@@ -1,4 +1,4 @@
-import { Edges, useGLTF } from "@react-three/drei";
+import { Edges, Gltf, useGLTF } from "@react-three/drei";
 import { RigidBody } from "@react-three/rapier";
 import { nanoid } from "nanoid";
 import { memo } from "react";
@@ -17,6 +17,16 @@ export const Model = memo(
     const { userData, ...otherProps } = props;
     const { nodes } = useGLTF(url);
 
+    // return (
+    //   <RigidBody
+    //     type="fixed"
+    //     colliders="hull"
+    //     // position={[0, 0, 0]}
+    //   >
+    //     <Gltf src={url} receiveShadow castShadow />
+    //   </RigidBody>
+    // );
+
     return (
       <RigidBody
         type="fixed"
@@ -25,7 +35,7 @@ export const Model = memo(
       >
         <group
           name={id}
-          userData={{ draggable: true, ...userData }}
+          userData={userData}
           // position-y={0.5}
           {...otherProps}
         >

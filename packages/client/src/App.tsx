@@ -1,3 +1,5 @@
+import "./index.css";
+
 import { Sky } from "@react-three/drei";
 import { Camera } from "./components/Camera";
 import { Character } from "./components/Character";
@@ -7,8 +9,9 @@ import { Light } from "./components/Light";
 import { WorldObjects } from "./components/WorldObjects";
 
 import { CharacterPos } from "./data/CharacterPos";
-
 import "./index.css";
+import { PointLight } from "./components/PointLight";
+import { Players } from "./components/Players";
 
 export const App = () => {
   return (
@@ -18,6 +21,8 @@ export const App = () => {
       <Character />
       <Light />
       <Sky />
+      <PointLight />
+      <Players />
 
       <WorldObjects />
       <DraftObjects />

@@ -1,12 +1,5 @@
 import { RigidBody } from "@react-three/rapier";
-import {
-  Geometry,
-  Base,
-  Addition,
-  Subtraction,
-  Intersection,
-  Difference,
-} from "@react-three/csg";
+import { Geometry, Base, Subtraction } from "@react-three/csg";
 import { Ocean } from "react-three-ocean";
 
 import { Ice } from "./Ice";
