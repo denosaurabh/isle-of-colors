@@ -1,18 +1,50 @@
 import { useSnapshot } from "valtio";
 import {
+  WorldObject,
+  addWorldObjects,
   moveSavedObjectIntoWorld,
   saveDraftObjects,
   userObjectsState,
 } from "../state/worldObjects";
 import { useMUD } from "../MUDContext";
+import { useEffect } from "react";
+import { worldState } from "../state/world";
+import { Has, getComponentValueStrict } from "@latticexyz/recs";
+import { useEntityQuery } from "@latticexyz/react";
 
 export const Footer = () => {
   const { draftObjects } = useSnapshot(userObjectsState);
-  // const {
-  //   components: { Counter, Buildings },
-  //   systemCalls: { increment, updateBuildingsList },
-  //   network: { singletonEntity },
-  // } = useMUD();
+  const {
+    components: { Buildings },
+    systemCalls: { addBuildingsMud },
+    network: { singletonEntity },
+  } = useMUD();
+
+  const { numberOfOnlineCharacters, isChainReady } = useSnapshot(worldState);
+  const allBuildingsIds = useEntityQuery([Has(Buildings)]);
+  useEffect(() => {
+    if (isChainReady) {
+      // console.log("allBuildingsIds", allBuildingsIds);
+      const newWorldObjects = allBuildingsIds.map((id) => {
+        const loadedBuildingsData = getComponentValueStrict(Buildings, id);
+        // console.log("loadedBuildingsData", loadedBuildingsData);
+
+        const objectData: WorldObject = {
+          id: id,
+          modelUrl: loadedBuildingsData["url"],
+          x: loadedBuildingsData["x"],
+          z: loadedBuildingsData["z"],
+          rotation: loadedBuildingsData["rotation"],
+          owner: loadedBuildingsData["owner"],
+          color: [],
+        };
+
+        return objectData;
+      });
+
+      addWorldObjects(newWorldObjects);
+    }
+  }, [allBuildingsIds]);
 
   const onSaveObjectsClick = () => {
     // disbale transform control
@@ -25,16 +57,13 @@ export const Footer = () => {
     // console.log("savedObjects", savedObjects.a); // id, url, ower address, rotaton, x, z, ( color list empty , amount list empty)
 
     savedObjects.a.forEach((obj: any) => {
-      // console.log("obj", obj);
-      // const { id, rotation, x, z } = obj;
-      // console.log("Adding obj", id, rotation, x, z);
-      // updateBuildingsList(
-      //   // obj["id"],
-      //   // "sdibeoidv",
-      //   Math.round(Number(obj["x"])),
-      //   Math.round(Number(obj["z"])),
-      //   Math.round(Number(obj["rotation"]))
-      // );
+      addBuildingsMud(
+        Math.round(Number(obj["x"])),
+        Math.round(Number(obj["z"])),
+        Math.round(Number(obj["rotation"])),
+        obj["id"],
+        obj["objectData"]["url"]
+      );
     });
 
     moveSavedObjectIntoWorld();

@@ -19,7 +19,7 @@ export function createSystemCalls(
     return getComponentValue(Counter, singletonEntity);
   };
 
-  const addCharacterMud = async (x: number, z: number, lastOnline : number) => {
+  const addCharacterMud = async (x: number, z: number, lastOnline: number) => {
     await worldSend("addCharacterMud", [x, z, lastOnline]);
   };
 
@@ -41,10 +41,21 @@ export function createSystemCalls(
     return worldSend("getCurrentCharacterIdMud", []);
   };
 
+  const addBuildingsMud = (
+    x: number,
+    z: number,
+    rotation: number,
+    id: string,
+    url: string
+  ) => {
+    worldSend("addBuildingsMud", [x, z, rotation, id, url]);
+  };
+
   return {
     increment,
     addCharacterMud,
     updateCharacterPositionMud,
     getCurrentCharacterIdMud,
+    addBuildingsMud,
   };
 }

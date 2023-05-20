@@ -13,16 +13,19 @@ export default mudConfig({
         lastOnline: "int32",
       },
     },
-    // Building: {
-    //   schema: {
-    //     x: "int32",
-    //     z: "int32",
-    //     rotation: "int32",
-    //     id: "string",
-    //   },
-      // Array of objects
-      // colors : [
-      //   {
+    Buildings: {
+      schema: {
+        x: "int32",
+        z: "int32",
+        rotation: "int32",
+        id: "bytes32",
+        url: "string",
+        // owner: "bytes32",
+      },
+    },
+    // Array of objects
+    // colors : [
+    //   {
     // },
   },
   modules: [
