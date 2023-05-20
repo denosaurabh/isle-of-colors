@@ -38,6 +38,21 @@ export const worldObjectsState = proxy<WorldObjectsState>({
   ],
 });
 
+export const addWorldObjects = (
+  newWorldObjects: Array<Omit<ArrayElement<WorldObjectsState["objects"]>, "id">>
+) => {
+  const newObjectsData = newWorldObjects.map((nw) => ({ ...nw, id: nanoid() }));
+
+  worldObjectsState.objects = [...worldObjectsState.objects, ...newObjectsData];
+};
+
+export const getClosestWorldObjects = (
+  objects: WorldObjectsState["objects"]
+): WorldObjectsState["objects"] => {
+  // TODO: do sort & filtering
+  return objects;
+};
+
 /* *************************************************************** */
 /* *********************  USER OBJECTS STATE  ******************** */
 /* *************************************************************** */

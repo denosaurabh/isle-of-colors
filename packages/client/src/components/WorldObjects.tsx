@@ -1,9 +1,13 @@
 import { useSnapshot } from "valtio";
-import { worldObjectsState } from "../state/worldObjects";
+import {
+  getClosestWorldObjects,
+  worldObjectsState,
+} from "../state/worldObjects";
 import { Model } from "./Model";
 
 export const WorldObjects = () => {
   const { objects } = useSnapshot(worldObjectsState);
+  const closestObjects = getClosestWorldObjects(objects);
 
   if (!objects.length) {
     return null;
@@ -11,7 +15,7 @@ export const WorldObjects = () => {
 
   return (
     <>
-      {objects.map((obj, i) => {
+      {closestObjects.map((obj, i) => {
         return (
           <Model
             key={i}
