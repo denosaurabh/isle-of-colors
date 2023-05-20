@@ -9,7 +9,6 @@ import { Sun } from "./components/Sun";
 import { WorldObjects } from "./components/WorldObjects";
 
 import { CharacterPos } from "./data/CharacterPos";
-import "./index.css";
 import { PointLight } from "./components/PointLight";
 import { Players } from "./components/Players";
 

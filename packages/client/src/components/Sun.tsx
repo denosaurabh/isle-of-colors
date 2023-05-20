@@ -3,6 +3,7 @@ import { memo, useRef } from "react";
 import { DirectionalLight } from "three";
 import * as THREE from "three";
 import {
+  DAY_NIGHT_CYCLE_SECONDS,
   calculateNormalizedVector,
   lerpNumber,
   updateWorldSunAngle,
