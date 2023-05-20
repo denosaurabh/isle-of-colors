@@ -19,21 +19,21 @@ export function createSystemCalls(
     return getComponentValue(Counter, singletonEntity);
   };
 
-  const addCharacterMud = async (x: number, z: number) => {
-    await worldSend("addCharacterMud", [x, z]);
+  const addCharacterMud = async (x: number, z: number, lastOnline : number) => {
+    await worldSend("addCharacterMud", [x, z, lastOnline]);
   };
 
   const updateCharacterPositionMud = async (
     id: string,
     x: number,
     z: number,
-    isOnline: boolean
+    lastOnline: number
   ) => {
     await worldSend("updateCharacterPositionMud", [
       entityToBytes32(id),
       x,
       z,
-      isOnline,
+      lastOnline,
     ]);
   };
 

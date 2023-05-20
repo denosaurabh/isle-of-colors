@@ -8,7 +8,12 @@ export const Players = () => {
     <>
       {players.map((p, i) => {
         return (
-          <mesh key={i} name={`player-${i}`} position={p}>
+          <mesh
+            key={i}
+            name={`player-${i}`}
+            position={p.position}
+            name={p.name}
+          >
             <boxGeometry args={[0.5, 1, 0.3]} />
             <meshBasicMaterial color="orange" />
           </mesh>

@@ -12,6 +12,7 @@ import {
   updateIsChainReady,
   updateNumberOfOnlineCharacters,
 } from "../state/world";
+import { updatePlayers } from "../state/players";
 
 export const CharacterPos = () => {
   const {
@@ -27,7 +28,7 @@ export const CharacterPos = () => {
   } = useMUD();
 
   const counter = useComponentValue(Counter, singletonEntity);
-  console.log("counter", counter);
+  // console.log("counter", counter);
   useEffect(() => {
     if (counter) {
       updateIsChainReady(true);
@@ -65,15 +66,30 @@ export const CharacterPos = () => {
     const allCharactersData = {};
     if (characterIds.length !== 0) {
       let numberOfOnlineCharacters = 0;
+      const allPlayersData = [];
       characterIds.map((id) => {
         const loadedPlayerData = getComponentValueStrict(Character, id);
         // console.log("loadedPlayerData", id, loadedPlayerData);
         allCharactersData[id] = loadedPlayerData;
+        if (
+          id !== currentCharacterId?.toLowerCase() &&
+          Math.floor(Date.now() / 1000) - loadedPlayerData["lastOnline"] < 4
+        ) {
+          allPlayersData.push({
+            position: [loadedPlayerData["x"], 0, loadedPlayerData["z"]],
+            name: id,
+          });
+        }
 
-        if (loadedPlayerData["isOnline"]) {
+        if (
+          Math.floor(Date.now() / 1000) - loadedPlayerData["lastOnline"] <
+          4
+        ) {
           numberOfOnlineCharacters++;
         }
       });
+
+      updatePlayers(allPlayersData);
 
       updateNumberOfOnlineCharacters(numberOfOnlineCharacters);
     }
@@ -108,7 +124,7 @@ export const CharacterPos = () => {
         updated.current = true;
       } else {
         console.log("character not found in the list, adding new character");
-        addCharacterMud(0, 0);
+        addCharacterMud(0, 0, Math.floor(Date.now() / 1000));
         allowUpdate(true);
         updated.current = true;
       }
@@ -121,7 +137,7 @@ export const CharacterPos = () => {
       counter
     ) {
       console.log("adding new character");
-      addCharacterMud(0, 0);
+      addCharacterMud(0, 0, Math.floor(Date.now() / 1000));
       allowUpdate(true);
       updated.current = true;
     }
@@ -137,10 +153,10 @@ export const CharacterPos = () => {
           currentCharacterId,
           Math.floor(characterState.position[0]),
           Math.floor(characterState.position[2]),
-          true
+          Math.floor(Date.now() / 1000)
         );
       }
-    }, 1000);
+    }, 500);
 
     return () => {
       clearInterval(subId);

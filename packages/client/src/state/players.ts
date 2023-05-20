@@ -2,6 +2,7 @@ import { proxy } from "valtio";
 
 type Player = {
   position: [number, number, number];
+  name: string;
 };
 
 type PlayersState = {
