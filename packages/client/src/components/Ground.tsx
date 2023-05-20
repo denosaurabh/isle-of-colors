@@ -17,8 +17,13 @@ export const Ground = () => {
 
   return (
     <RigidBody type="fixed" colliders="hull">
-      <mesh userData={{ ground: true }} position={[0, 0, 0]} receiveShadow>
-        <boxGeometry args={[200, 0, 200]} />
+      <mesh
+        userData={{ ground: true }}
+        position={[0, -0.5, 0]}
+        receiveShadow
+        castShadow
+      >
+        <boxGeometry args={[200, 1, 200]} />
         <meshPhongMaterial color="#999" />
 
         {/* <meshStandardMaterial

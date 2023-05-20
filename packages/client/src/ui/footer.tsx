@@ -36,7 +36,8 @@ export const Footer = () => {
       //   Math.round(Number(obj["rotation"]))
       // );
     });
-    // moveSavedObjectIntoWorld();
+
+    moveSavedObjectIntoWorld();
   };
 
   return (
