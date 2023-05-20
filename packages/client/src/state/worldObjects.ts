@@ -39,7 +39,8 @@ export const worldObjectsState = proxy<WorldObjectsState>({
 });
 
 export const addWorldObjects = (
-  newWorldObjects: Array<Omit<ArrayElement<WorldObjectsState["objects"]>, "id">>
+  // newWorldObjects: Array<Omit<ArrayElement<WorldObjectsState["objects"]>, "id">>
+  newWorldObjects: WorldObjectsState["objects"]
 ) => {
   const newObjectsData = newWorldObjects.map((nw) => ({ ...nw, id: nanoid() }));
 
