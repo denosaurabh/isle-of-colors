@@ -1,5 +1,18 @@
+import { useSnapshot } from "valtio";
+import {
+  moveSavedObjectIntoWorld,
+  saveDraftObjects,
+  userObjectsState,
+} from "../state/worldObjects";
+
 export const Footer = () => {
-  const onSaveObjectsClick = () => {};
+  const { draftObjects } = useSnapshot(userObjectsState);
+
+  const onSaveObjectsClick = () => {
+    // disbale transform control
+    saveDraftObjects(draftObjects.map((d) => d.id));
+    moveSavedObjectIntoWorld();
+  };
 
   return (
     <div className="fixed bottom-2 right-2 w-fit h-fit p-2 rounded-lg bg-slate-800 bg-opacity-25 backdrop-blur-md">

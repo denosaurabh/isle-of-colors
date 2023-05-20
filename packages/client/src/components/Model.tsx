@@ -1,5 +1,7 @@
-import { Edges, GradientTexture, useGLTF } from "@react-three/drei";
+import { Edges, useGLTF } from "@react-three/drei";
 import { RigidBody } from "@react-three/rapier";
+import { nanoid } from "nanoid";
+import { memo } from "react";
 
 type ModelProps = {
   url: string;
@@ -7,47 +9,48 @@ type ModelProps = {
   id?: string;
   color?: string;
 
-  [key: string]: any;
+  [key: string]: unknown;
 };
 
-export const Model = ({ id, url, color = "#059669", ...props }: ModelProps) => {
-  const { userData, ...otherProps } = props;
-  const { nodes } = useGLTF(url);
+export const Model = memo(
+  ({ id, url, color = "#059669", ...props }: ModelProps) => {
+    const { userData, ...otherProps } = props;
+    const { nodes } = useGLTF(url);
 
-  return (
-    <RigidBody
-      type="fixed"
-      colliders="hull"
-      // position={[0, 0, 0]}
-    >
-      <group
-        name={id}
-        userData={{ draggable: true, ...userData }}
-        position-y={0.5}
-        {...otherProps}
+    return (
+      <RigidBody
+        type="fixed"
+        colliders="hull"
+        // position={[0, 0, 0]}
       >
-        {Object.values(nodes).map((n, i) => {
-          if (n.type !== "Mesh") return null;
+        <group
+          name={id}
+          userData={{ draggable: true, ...userData }}
+          // position-y={0.5}
+          {...otherProps}
+        >
+          {Object.values(nodes).map((n, i) => {
+            if (n.type !== "Mesh") return null;
 
-          return (
-            <mesh
-              key={i}
-              castShadow
-              receiveShadow
-              geometry={n.geometry}
-              position={n.position}
-              rotation={n.rotation}
-              scale={n.scale}
-            >
-              <meshPhongMaterial color={color} />
+            return (
+              <mesh
+                key={i}
+                castShadow
+                receiveShadow
+                geometry={n.geometry}
+                position={n.position}
+                rotation={n.rotation}
+                scale={n.scale}
+              >
+                <meshPhongMaterial color={color} />
 
-              <Edges scale={1} renderOrder={1}>
-                <meshPhongMaterial color="#333" />
-              </Edges>
+                <Edges scale={1} renderOrder={1}>
+                  <meshPhongMaterial color="#333" />
+                </Edges>
 
-              {/* <meshPhongMaterial color={color} /> */}
+                {/* <meshPhongMaterial color={color} /> */}
 
-              {/* <Edges scale={1} renderOrder={1}>
+                {/* <Edges scale={1} renderOrder={1}>
                 <meshPhongMaterial>
                   <GradientTexture
                     stops={[0, 1]} // As many stops as you want
@@ -56,10 +59,13 @@ export const Model = ({ id, url, color = "#059669", ...props }: ModelProps) => {
                   />
                 </meshPhongMaterial>
               </Edges> */}
-            </mesh>
-          );
-        })}
-      </group>
-    </RigidBody>
-  );
-};
+              </mesh>
+            );
+          })}
+        </group>
+      </RigidBody>
+    );
+  }
+);
+
+Model.displayName = "Model" + nanoid();
