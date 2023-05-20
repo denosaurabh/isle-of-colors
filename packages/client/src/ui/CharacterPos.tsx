@@ -90,9 +90,15 @@ export const CharacterPos = () => {
         updated.current = true;
       } else {
         addCharacterMud(0, 0);
-        allowUpdate(true);
-        updated.current = true;
+        // allowUpdate(true);
+        // updated.current = true;
       }
+    }
+
+    if (currentCharacterId && characterIds.length === 0 && !updated.current) {
+      addCharacterMud(0, 0);
+      // allowUpdate(true);
+      // updated.current = true;
     }
   }, [currentCharacterId, characterIds]);
 
