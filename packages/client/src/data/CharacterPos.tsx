@@ -8,7 +8,10 @@ import {
 } from "../state/character";
 import { useEffect, useRef, useState } from "react";
 import { Has, getComponentValueStrict } from "@latticexyz/recs";
-import { updateNumberOfOnlineCharacters } from "../state/world";
+import {
+  updateIsChainReady,
+  updateNumberOfOnlineCharacters,
+} from "../state/world";
 
 export const CharacterPos = () => {
   const {
@@ -23,7 +26,15 @@ export const CharacterPos = () => {
     network: { singletonEntity },
   } = useMUD();
 
-  // const counter = useComponentValue(Counter, singletonEntity);
+  const counter = useComponentValue(Counter, singletonEntity);
+  console.log("counter", counter);
+  useEffect(() => {
+    if (counter) {
+      updateIsChainReady(true);
+    }
+  }, [counter]);
+  // const counter = 1;
+  // updateIsChainReady(true);
 
   // TODO : all users position stored but hidden ( shared encrypt setup ), only those users will see location which are closem zkp system
   // TODO : Position update function, check distance, make sure no teleportation, make sure no speed hacks, with zkp, and shared encrypt
@@ -42,6 +53,7 @@ export const CharacterPos = () => {
     const getCharacterId = async () => {
       const currentCharacterId = await getCurrentCharacterIdMud();
       if (currentCharacterId) {
+        console.log("currentCharacterId", currentCharacterId);
         setcurrentCharacterId(currentCharacterId?.["from"]);
       }
     };
@@ -72,8 +84,14 @@ export const CharacterPos = () => {
   // TODO : Multiple players seems to remove the character each other states
   const updated = useRef(false);
   useEffect(() => {
-    console.log(currentCharacterId, characterIds, updated.current);
-    if (currentCharacterId && characterIds.length !== 0 && !updated.current) {
+    // console.log(currentCharacterId, characterIds, updated.current);
+    if (
+      currentCharacterId &&
+      characterIds.length !== 0 &&
+      !updated.current &&
+      counter
+    ) {
+      console.log(currentCharacterId, characterIds);
       if (characterIds.includes(currentCharacterId.toLowerCase())) {
         const loadedPlayerData = getComponentValueStrict(
           Character,
@@ -89,16 +107,23 @@ export const CharacterPos = () => {
         allowUpdate(true);
         updated.current = true;
       } else {
+        console.log("character not found in the list, adding new character");
         addCharacterMud(0, 0);
-        // allowUpdate(true);
-        // updated.current = true;
+        allowUpdate(true);
+        updated.current = true;
       }
     }
 
-    if (currentCharacterId && characterIds.length === 0 && !updated.current) {
+    if (
+      currentCharacterId &&
+      characterIds.length === 0 &&
+      !updated.current &&
+      counter
+    ) {
+      console.log("adding new character");
       addCharacterMud(0, 0);
-      // allowUpdate(true);
-      // updated.current = true;
+      allowUpdate(true);
+      updated.current = true;
     }
   }, [currentCharacterId, characterIds]);
 

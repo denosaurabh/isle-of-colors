@@ -153,6 +153,8 @@ export const saveDraftObjects = (ids: string[]) => {
   });
 
   userObjectsState.draftObjects = updatedDraftObjects;
+
+  return updatedDraftObjects;
 };
 
 export const moveSavedObjectIntoWorld = () => {

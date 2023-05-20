@@ -6,6 +6,8 @@ import { Ground } from "./components/Ground";
 import { Light } from "./components/Light";
 import { WorldObjects } from "./components/WorldObjects";
 
+import { CharacterPos } from "./data/CharacterPos";
+
 import "./index.css";
 
 export const App = () => {
@@ -19,6 +21,8 @@ export const App = () => {
 
       <WorldObjects />
       <DraftObjects />
+
+      <CharacterPos />
     </>
   );
 };

@@ -4,14 +4,39 @@ import {
   saveDraftObjects,
   userObjectsState,
 } from "../state/worldObjects";
+import { useMUD } from "../MUDContext";
 
 export const Footer = () => {
   const { draftObjects } = useSnapshot(userObjectsState);
+  // const {
+  //   components: { Counter, Buildings },
+  //   systemCalls: { increment, updateBuildingsList },
+  //   network: { singletonEntity },
+  // } = useMUD();
 
   const onSaveObjectsClick = () => {
     // disbale transform control
-    saveDraftObjects(draftObjects.map((d) => d.id));
-    moveSavedObjectIntoWorld();
+    const savedObjectsProxy = saveDraftObjects(draftObjects.map((d) => d.id));
+
+    // const savedObjects = draftObjects.filter((d) => d.status === "saved");
+
+    const savedObjects = JSON.parse(JSON.stringify({ a: savedObjectsProxy }));
+
+    // console.log("savedObjects", savedObjects.a); // id, url, ower address, rotaton, x, z, ( color list empty , amount list empty)
+
+    savedObjects.a.forEach((obj: any) => {
+      // console.log("obj", obj);
+      // const { id, rotation, x, z } = obj;
+      // console.log("Adding obj", id, rotation, x, z);
+      // updateBuildingsList(
+      //   // obj["id"],
+      //   // "sdibeoidv",
+      //   Math.round(Number(obj["x"])),
+      //   Math.round(Number(obj["z"])),
+      //   Math.round(Number(obj["rotation"]))
+      // );
+    });
+    // moveSavedObjectIntoWorld();
   };
 
   return (

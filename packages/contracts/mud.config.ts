@@ -13,17 +13,17 @@ export default mudConfig({
         isOnline: "bool",
       },
     },
-    Building: {
-      schema: {
-        x: "int32",
-        z: "int32",
-        rotation: "int32",
-        id: "string",
-      },
+    // Building: {
+    //   schema: {
+    //     x: "int32",
+    //     z: "int32",
+    //     rotation: "int32",
+    //     id: "string",
+    //   },
       // Array of objects
       // colors : [
       //   {
-    },
+    // },
   },
   modules: [
     {

@@ -29,7 +29,12 @@ export function createSystemCalls(
     z: number,
     isOnline: boolean
   ) => {
-    await worldSend("updateCharacterPositionMud", [entityToBytes32(id), x, z, isOnline]);
+    await worldSend("updateCharacterPositionMud", [
+      entityToBytes32(id),
+      x,
+      z,
+      isOnline,
+    ]);
   };
 
   const getCurrentCharacterIdMud = () => {
