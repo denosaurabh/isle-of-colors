@@ -59,14 +59,14 @@ export const getClosestWorldObjects = (
 /* *********************  USER OBJECTS STATE  ******************** */
 /* *************************************************************** */
 
-type DraftWorldObject = {
+export type DraftWorldObject = {
   id: string;
 
   objectData: ArrayElement<typeof OBJECTS_DATA>;
 
   x: number;
   z: number;
-  rotation: number;
+  rotation: string;
 
   status: "editing" | "saved" | "discard";
 };
@@ -109,6 +109,20 @@ export const updateDraftObjectPosition = (
     if (dobj.id === id) {
       dobj.x = x;
       dobj.z = z;
+    }
+
+    return updatedDobj;
+  });
+
+  userObjectsState.draftObjects = updatedDraftObjects;
+};
+
+export const updateDraftObjectRotation = (id: string, rotation: string) => {
+  const updatedDraftObjects = userObjectsState.draftObjects.map((dobj) => {
+    const updatedDobj = dobj;
+
+    if (dobj.id === id) {
+      dobj.rotation = rotation;
     }
 
     return updatedDobj;

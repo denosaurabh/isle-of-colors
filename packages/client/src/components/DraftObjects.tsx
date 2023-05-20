@@ -1,10 +1,12 @@
 import { useThree } from "@react-three/fiber";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useSnapshot } from "valtio";
 import { TransformControls } from "three/examples/jsm/controls/TransformControls";
 
 import {
+  DraftWorldObject,
   updateDraftObjectPosition,
+  updateDraftObjectRotation,
   userObjectsState,
 } from "../state/worldObjects";
 import { updateDisableCameraControls } from "../state/camera";
@@ -60,6 +62,9 @@ export const DraftObjects = () => {
             x: Number(object?.position.x),
             z: Number(object?.position.z),
           });
+
+          console.log("r", object.rotation.y.toFixed(4));
+          updateDraftObjectRotation(d.id, object.rotation.y.toFixed(4));
         });
 
         control.showY = false;
@@ -67,6 +72,40 @@ export const DraftObjects = () => {
       });
     }
   }, [draftObjects, draftObjects.map((d) => d.status), scene]);
+
+  const onModelClick = useCallback(
+    (dobj: DraftWorldObject) => {
+      const controlObject = scene.getObjectByName(getControlId(dobj.id));
+
+      if (controlObject) {
+        if (dobj.status !== "editing") return;
+
+        // console.log("mode", controlObject.mode);
+
+        switch (controlObject.mode) {
+          case "translate": {
+            controlObject.setMode("rotate");
+
+            controlObject.showY = true;
+            controlObject.showX = false;
+            controlObject.showZ = false;
+
+            break;
+          }
+          case "rotate": {
+            controlObject.setMode("translate");
+
+            controlObject.showY = false;
+            controlObject.showX = true;
+            controlObject.showZ = true;
+
+            break;
+          }
+        }
+      }
+    },
+    [scene]
+  );
 
   return (
     <>
@@ -80,7 +119,13 @@ export const DraftObjects = () => {
             <Model
               key={i}
               url={dobj.objectData.url}
+              color="#fff"
               name={getDraftObjectId(dobj.id)}
+              onClick={(e) => {
+                e.stopPropagation();
+
+                onModelClick(dobj);
+              }}
             />
           </>
         );

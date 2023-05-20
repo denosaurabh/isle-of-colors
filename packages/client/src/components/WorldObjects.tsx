@@ -44,6 +44,7 @@ export const WorldObjects = () => {
             url={obj.modelUrl}
             position-x={obj.x}
             position-z={obj.z}
+            rotation-y={obj.rotation}
             onPointerDown={() => onPointerDown(obj)}
           />
         );

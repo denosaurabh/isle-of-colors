@@ -13,7 +13,7 @@ type ModelProps = {
 };
 
 export const Model = memo(
-  ({ id, url, color = "#059669", ...props }: ModelProps) => {
+  ({ id, url, color = "#fff", ...props }: ModelProps) => {
     const { userData, ...otherProps } = props;
     const { nodes } = useGLTF(url);
 
