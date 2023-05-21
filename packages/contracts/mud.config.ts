@@ -20,7 +20,8 @@ export default mudConfig({
         rotation: "int32",
         id: "bytes32",
         url: "string",
-        // owner: "bytes32",
+        // color: "int32[]",
+        // structure: "int32[]",
       },
     },
     // Array of objects
