@@ -10,37 +10,20 @@ import {
 } from "../state/character";
 import { StructurePainting } from "./StructurePainting";
 import { ComponentProps, memo, useRef } from "react";
-import { useFrame, useThree } from "@react-three/fiber";
-import { Color } from "three";
-import { isEqual } from "lodash";
+import { useFrame } from "@react-three/fiber";
 import { getFullStructureName } from "../utils/object";
 
 export const WorldObjects = () => {
   const { objects } = useSnapshot(worldObjectsState);
   const closestObjects = getClosestWorldObjects(objects);
 
-  const { scene } = useThree();
-
   const onStructureFocusIn = (structureName: string, currentColor: string) => {
     startPaintingStructure(structureName, currentColor);
   };
 
-  const onStructureFocusOut = (structureName: string, objectId: string) => {
+  const onStructureFocusOut = (structureName: string) => {
     stopPaintingStructure(structureName);
-
-    // const structure = scene.getObjectByName(structureName);
-
-    // console.log("asd", !!structure);
-
-    // if (structure && worldObjectsState.objects[objectId]?.id) {
-    //   // col.set(color);
-    //   // console.log("OBJ", -name, color);
-
-    //   structure.material?.color?.set?.(worldObjectsState.objects[objectId]['']);
-    // }
   };
-
-  console.log(closestObjects);
 
   return (
     <>

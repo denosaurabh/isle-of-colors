@@ -9,8 +9,9 @@ import {
 } from "@react-three/rapier";
 import { useEffect, useRef } from "react";
 import { characterState, updateCharacterPosition } from "../state/character";
-import { useSnapshot } from "valtio";
+import { subscribe, useSnapshot } from "valtio";
 import * as THREE from "three";
+import { subscribeKey } from "valtio/utils";
 
 const useKeyboard = () => {
   const keysDown = useRef({});
@@ -41,6 +42,8 @@ const walkDirection = new THREE.Vector3();
 const rotateAngle = new THREE.Vector3(0, 1, 0);
 const rotateQuarternion: THREE.Quaternion = new THREE.Quaternion();
 
+const pos = new THREE.Vector3();
+
 export const Character = () => {
   const rapier = useRapier();
   const controller = useRef();
@@ -49,7 +52,7 @@ export const Character = () => {
 
   const characterRef = useRef();
 
-  const { position, allowUpdate } = useSnapshot(characterState);
+  // const { position } = useSnapshot(characterState);
 
   const keysdown = useKeyboard();
 
@@ -68,13 +71,30 @@ export const Character = () => {
     controller.current = c;
   }, [rapier]);
 
-  const pos = new THREE.Vector3();
+  const hasUpdatedPos = useRef(false);
+  useEffect(
+    () => {
+      subscribeKey(characterState, "position", () => {
+        if (body.current && !hasUpdatedPos.current) {
+          if (characterState.position[0] || characterState.position[2]) {
+            pos.set(characterState.position[0], 1, characterState.position[2]);
 
-  useEffect(() => {
-    if (body.current) {
-      body.current.setTranslation(pos.set(position[0], 1, position[2]), true);
-    }
-  }, [position]);
+            body.current.setTranslation(pos, true);
+            // characterRef.current.position.set(
+            //   characterState.position[0],
+            //   1,
+            //   characterState.position[2]
+            // );
+
+            hasUpdatedPos.current = true;
+          }
+        }
+      });
+    },
+    [
+      // position
+    ]
+  );
 
   useFrame(({ camera }, delta) => {
     if (controller.current && body.current && collider.current) {
@@ -164,7 +184,7 @@ export const Character = () => {
 
         const correctedMovement = controller.current.computedMovement();
 
-        if (allowUpdate) {
+        if (characterState.allowUpdate) {
           position.add(vec3(correctedMovement));
           updateCharacterPosition([position.x, position.y, position.z]);
         }

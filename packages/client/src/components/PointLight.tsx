@@ -12,7 +12,7 @@ export const PointLight = () => {
   useFrame(() => {
     if (ref.current) {
       if (worldState.time.type === "midnight") {
-        ref.current.intensity = 0.6;
+        ref.current.intensity = 0.2;
       } else {
         ref.current.intensity = 0;
       }
@@ -30,7 +30,7 @@ export const PointLight = () => {
       <pointLight
         ref={ref}
         color="transparent"
-        distance={10}
+        distance={5}
         // decay={10}
       />
     </>

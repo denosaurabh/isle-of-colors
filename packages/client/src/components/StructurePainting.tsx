@@ -14,7 +14,7 @@ const color = new Color();
 const lerpColor = new Color();
 
 export const StructurePainting = () => {
-  useFrame(({ scene }) => {
+  useFrame(() => {
     Object.values(characterState.paintingState).map((p) => {
       if (!p.isPainting || !p.structureName || !p.initialColor) return;
 
@@ -31,8 +31,6 @@ export const StructurePainting = () => {
       const alpha = increaseStructureColorTransition(p.structureName);
 
       if (alpha !== null) {
-        console.log(`#${lerpColor.lerp(mixWithColor, alpha).getHexString()}`);
-
         updateObjectStructureColor(
           modelName,
           structureName,
