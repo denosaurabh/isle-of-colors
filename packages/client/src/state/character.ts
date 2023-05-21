@@ -39,7 +39,7 @@ export const characterState = proxy<CharacterState>({
 
   activeActionMode: "paint",
   activeColor: "black",
-  colorInventory: { "#000": "500", pink: "500" },
+  colorInventory: { "#000": 500, pink: 500 },
 
   paintingState: {},
 });
@@ -76,7 +76,7 @@ export const startPaintingStructure = (
       break;
     }
     case "scoop": {
-      startApplyingPaintOnStructure(structureName, currentColor);
+      startScoopingPaintFromStructure(structureName, currentColor);
       break;
     }
   }

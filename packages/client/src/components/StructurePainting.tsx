@@ -18,7 +18,6 @@ export const StructurePainting = () => {
         const mixWithColor = color.set(p.mixWithColor);
         const alpha = increaseStructureColorTransition(p.structureName);
 
-        console.log("updating color");
         structureObj.material.color.lerp(mixWithColor, alpha);
       }
     });
