@@ -118,9 +118,10 @@ export const DraftObjects = () => {
           <>
             <Model
               key={i}
+              id={getDraftObjectId(dobj.id)}
               url={dobj.objectData.url}
               color="#fff"
-              name={getDraftObjectId(dobj.id)}
+              // name={getDraftObjectId(dobj.id)}
               onClick={(e) => {
                 e.stopPropagation();
 

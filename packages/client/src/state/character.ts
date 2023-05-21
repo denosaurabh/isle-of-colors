@@ -21,7 +21,7 @@ type CharacterState = {
   position: [number, number, number];
   allowUpdate: boolean;
 
-  mode: "paint" | "scoop";
+  activeActionMode: "paint" | "scoop";
 
   activeColor: string;
   colorInventory: Record<ColorName, ColorAmount>;
@@ -37,9 +37,9 @@ export const characterState = proxy<CharacterState>({
   position: [0, 0, 0],
   allowUpdate: false,
 
-  mode: "paint",
+  activeActionMode: "paint",
   activeColor: "black",
-  colorInventory: {},
+  colorInventory: { "#000": "500", pink: "500" },
 
   paintingState: {},
 });
@@ -56,11 +56,21 @@ export const updateCharacterId = (id: string) => {
   characterState.id = id;
 };
 
+export const setActiveActionMode = (
+  mode: CharacterState["activeActionMode"]
+) => {
+  characterState.activeActionMode = mode;
+};
+
+export const setActiveColor = (color: string) => {
+  characterState.activeColor = color;
+};
+
 export const startPaintingStructure = (
   structureName: string,
   currentColor: string
 ) => {
-  switch (characterState.mode) {
+  switch (characterState.activeActionMode) {
     case "paint": {
       startApplyingPaintOnStructure(structureName, currentColor);
       break;
