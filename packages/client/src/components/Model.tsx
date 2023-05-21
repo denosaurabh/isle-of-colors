@@ -109,7 +109,7 @@ export const Model = memo(
     );
   },
   (oldProps, newProps) => {
-    // don't rerender the component of structureColor change
+    // don't rerender the component when structures change
     return oldProps.id === newProps.id && oldProps.url === newProps.url;
   }
 );

@@ -11,6 +11,7 @@ import { WorldObjects } from "./components/WorldObjects";
 import { CharacterPos } from "./data/CharacterPos";
 import { PointLight } from "./components/PointLight";
 import { Players } from "./components/Players";
+import { Forest } from "./components/Forest";
 
 export const App = () => {
   return (
@@ -25,6 +26,8 @@ export const App = () => {
 
       <WorldObjects />
       <DraftObjects />
+
+      <Forest />
 
       <CharacterPos />
     </>

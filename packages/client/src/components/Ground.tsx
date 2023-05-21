@@ -25,9 +25,9 @@ export const Ground = () => {
       >
         <boxGeometry args={[200, 1, 200]} />
         <meshPhongMaterial
-          color="#999"
-          // map={texture}
-          // color="#f9ba8b"
+        // color="#999"
+        // map={texture}
+        // color="#f9ba8b"
         />
       </mesh>
     </RigidBody>

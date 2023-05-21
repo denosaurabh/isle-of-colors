@@ -9,6 +9,8 @@ import {
   stopPaintingStructure,
 } from "../state/character";
 import { StructurePainting } from "./StructurePainting";
+import { ComponentProps, useEffect } from "react";
+import { useThree } from "@react-three/fiber";
 
 export const WorldObjects = () => {
   const { objects } = useSnapshot(worldObjectsState);
@@ -30,7 +32,7 @@ export const WorldObjects = () => {
     <>
       {closestObjects.map((obj, i) => {
         return (
-          <Model
+          <WorldModel
             key={i}
             id={obj.id}
             url={obj.modelUrl}
@@ -47,4 +49,14 @@ export const WorldObjects = () => {
       <StructurePainting />
     </>
   );
+};
+
+const WorldModel = (props: ComponentProps<typeof Model>) => {
+  const { scene } = useThree();
+
+  useEffect(() => {
+    console.log("rerender");
+  }, [props.structures]);
+
+  return <Model {...props} />;
 };

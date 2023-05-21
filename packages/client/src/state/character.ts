@@ -65,6 +65,14 @@ export const decreaseActiveColorQuantity = (quantity = 0.5) => {
     quantity);
 };
 
+export const addColorInInventory = (color: ColorName, amount: ColorAmount) => {
+  if (characterState.colorInventory[color]) {
+    characterState.colorInventory[color] += amount;
+  } else {
+    characterState.colorInventory[color] = amount;
+  }
+};
+
 export const setActiveActionMode = (
   mode: CharacterState["activeActionMode"]
 ) => {
@@ -134,13 +142,21 @@ export const stopPaintingStructure = (structureName: string) => {
 export const increaseStructureColorTransition = (
   structureName: string
 ): number | null => {
-  const newQuantity = decreaseActiveColorQuantity();
-
-  if (newQuantity <= 0) {
-    return null;
-  }
-
   const p = characterState.paintingState[structureName];
+
+  if (!p) return null;
+
+  if (characterState.activeActionMode === "paint") {
+    const newQuantity = decreaseActiveColorQuantity();
+
+    if (newQuantity <= 0) {
+      return null;
+    }
+  } else if (characterState.activeActionMode === "scoop") {
+    if (!["#fff", "#ffffff", "white"].includes(p.initialColor)) {
+      addColorInInventory(p.initialColor, 0.5);
+    }
+  }
 
   const updatedTransitionAmount =
     p.transition_amount < 1 ? p.transition_amount + p.transition_speed : 1;

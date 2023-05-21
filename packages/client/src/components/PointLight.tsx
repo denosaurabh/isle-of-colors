@@ -12,7 +12,7 @@ export const PointLight = () => {
   useFrame(() => {
     if (ref.current) {
       if (worldState.time.type === "midnight") {
-        ref.current.intensity = 1;
+        ref.current.intensity = 0.6;
       } else {
         ref.current.intensity = 0;
       }

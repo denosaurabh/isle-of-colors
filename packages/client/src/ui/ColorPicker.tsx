@@ -29,7 +29,7 @@ export const ColorPicker = () => {
               value={color}
               style={{ backgroundColor: color }}
             >
-              {amount.toFixed(2)}
+              {amount.toFixed(0)}
             </ToggleGroup.Item>
           );
         })}
