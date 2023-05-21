@@ -1,16 +1,35 @@
 import { proxy } from "valtio";
-import { WorldObject } from "./worldObjects";
+
+type StructureName = string;
+
+type ColorName = string;
+type ColorAmount = number;
+
+type Painting = {
+  isPainting: boolean;
+  structureName: StructureName;
+
+  initialColor: string;
+  mixWithColor: string;
+
+  transition_amount: number; // how much the color has transitioned, between 0 & 1
+  transition_speed: number; // speed of the transition
+};
 
 type CharacterState = {
   id: string;
   position: [number, number, number];
   allowUpdate: boolean;
-  paintingState: {
-    isPainting: boolean;
-    paintingSince: number | null; // milliseconds
-    object: WorldObject | null;
-  };
+
+  mode: "paint" | "scoop";
+
+  activeColor: string;
+  colorInventory: Record<ColorName, ColorAmount>;
+
+  paintingState: Record<StructureName, Painting>;
 };
+
+const TRANSITION_SPEED = 0.005;
 
 export const characterState = proxy<CharacterState>({
   id: "",
@@ -18,7 +37,11 @@ export const characterState = proxy<CharacterState>({
   position: [0, 0, 0],
   allowUpdate: false,
 
-  paintingState: { isPainting: false, paintingSince: null, object: null },
+  mode: "paint",
+  activeColor: "black",
+  colorInventory: {},
+
+  paintingState: {},
 });
 
 export const updateCharacterPosition = (newPos: [number, number, number]) => {
@@ -33,20 +56,74 @@ export const updateCharacterId = (id: string) => {
   characterState.id = id;
 };
 
-export const updatePaintingState = (
-  object: CharacterState["paintingState"]["object"]
+export const startPaintingStructure = (
+  structureName: string,
+  currentColor: string
 ) => {
-  if (object) {
-    characterState.paintingState = {
-      isPainting: true,
-      paintingSince: Date.now(),
-      object,
-    };
-  } else {
-    characterState.paintingState = {
-      isPainting: false,
-      paintingSince: null,
-      object: null,
-    };
+  switch (characterState.mode) {
+    case "paint": {
+      startApplyingPaintOnStructure(structureName, currentColor);
+      break;
+    }
+    case "scoop": {
+      startApplyingPaintOnStructure(structureName, currentColor);
+      break;
+    }
   }
+};
+
+export const startApplyingPaintOnStructure = (
+  structureName: string,
+  currentColor: string
+) => {
+  characterState.paintingState[structureName] = {
+    isPainting: true,
+    structureName,
+
+    initialColor: currentColor,
+    mixWithColor: characterState.activeColor,
+
+    transition_amount: 0,
+    transition_speed: TRANSITION_SPEED,
+  };
+};
+
+export const startScoopingPaintFromStructure = (
+  structureName: string,
+  currentColor: string
+) => {
+  characterState.paintingState[structureName] = {
+    isPainting: true,
+    structureName,
+
+    initialColor: currentColor,
+    mixWithColor: "#fff",
+
+    transition_amount: 0,
+    transition_speed: TRANSITION_SPEED,
+  };
+};
+
+export const stopPaintingStructure = (structureName: string) => {
+  delete characterState.paintingState[structureName];
+};
+
+export const increaseStructureColorTransition = (structureName: string) => {
+  const p = characterState.paintingState[structureName];
+
+  const updatedTransitionAmount =
+    p.transition_amount < 1 ? p.transition_amount + p.transition_speed : 1;
+
+  characterState.paintingState[structureName] = {
+    isPainting: true,
+    structureName,
+
+    initialColor: p.initialColor,
+    mixWithColor: p.mixWithColor,
+
+    transition_amount: updatedTransitionAmount,
+    transition_speed: p.transition_speed,
+  };
+
+  return updatedTransitionAmount;
 };

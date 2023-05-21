@@ -1,34 +1,26 @@
 import { useSnapshot } from "valtio";
 import {
-  WorldObject,
   getClosestWorldObjects,
   worldObjectsState,
 } from "../state/worldObjects";
 import { Model } from "./Model";
-import { updatePaintingState } from "../state/character";
-import { useEffect } from "react";
+import {
+  startPaintingStructure,
+  stopPaintingStructure,
+} from "../state/character";
+import { StructurePainting } from "./StructurePainting";
 
 export const WorldObjects = () => {
   const { objects } = useSnapshot(worldObjectsState);
   const closestObjects = getClosestWorldObjects(objects);
 
-  const onPointerDown = (obj: WorldObject) => {
-    updatePaintingState(obj);
+  const onStructureFocusIn = (structureName: string, currentColor: string) => {
+    startPaintingStructure(structureName, currentColor);
   };
 
-  const onPointerUp = () => {
-    updatePaintingState(null);
+  const onStructureFocusOut = (structureName: string) => {
+    stopPaintingStructure(structureName);
   };
-
-  useEffect(() => {
-    if (!window) return;
-
-    window.addEventListener("pointerup", onPointerUp);
-
-    return () => {
-      window.removeEventListener("pointerup", onPointerUp);
-    };
-  }, []);
 
   if (!objects.length) {
     return null;
@@ -42,13 +34,17 @@ export const WorldObjects = () => {
             key={i}
             id={obj.id}
             url={obj.modelUrl}
+            structures={obj.structures}
             position-x={obj.x}
             position-z={obj.z}
             rotation-y={obj.rotation}
-            onPointerDown={() => onPointerDown(obj)}
+            onStructureFocusIn={onStructureFocusIn}
+            onStructureFocusOut={onStructureFocusOut}
           />
         );
       })}
+
+      <StructurePainting />
     </>
   );
 };

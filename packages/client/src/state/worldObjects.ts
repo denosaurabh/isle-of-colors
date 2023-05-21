@@ -4,10 +4,8 @@ import { characterState } from "./character";
 import { nanoid } from "nanoid";
 import { ArrayElement } from "../utils/array";
 
-type WorldObjectColor = {
-  color: string;
-  amount: number;
-};
+type StructureName = string;
+type StructureColor = string;
 
 export type WorldObject = {
   id: string;
@@ -18,7 +16,8 @@ export type WorldObject = {
   rotation: number;
 
   owner: string;
-  color: Array<WorldObjectColor>;
+
+  structures: Record<StructureName, StructureColor>;
 };
 
 type WorldObjectsState = {
@@ -34,7 +33,7 @@ export const worldObjectsState = proxy<WorldObjectsState>({
       z: 0,
       rotation: 0,
       owner: "",
-      color: [],
+      structures: {},
     },
   ],
 });
@@ -91,7 +90,7 @@ export const addDraftObject = (objectId: string) => {
 
     objectData: foundObjectData,
 
-    rotation: 0,
+    rotation: "0",
     x: characterState.position[0],
     z: characterState.position[1],
 
@@ -180,11 +179,12 @@ export const moveSavedObjectIntoWorld = () => {
 
     x: sobj.x,
     z: sobj.z,
-    rotation: sobj.rotation,
+    rotation: Number(sobj.rotation),
 
     // TODO: owner
     owner: "",
-    color: [],
+
+    structures: {},
   }));
 
   worldObjectsState.objects = [
