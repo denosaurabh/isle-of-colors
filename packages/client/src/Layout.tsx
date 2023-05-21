@@ -41,7 +41,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
           orthographic
           camera={{ position: [10, 10, 10], zoom: 50, near: 0.0, far: 200 }}
         >
-          {/* <Perf position="top-left" /> */}
+          <Perf position="top-left" />
 
           <color attach="background" args={["#d0d0d0"]} />
 

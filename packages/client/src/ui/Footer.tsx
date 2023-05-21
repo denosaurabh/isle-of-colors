@@ -36,7 +36,8 @@ export const Footer = () => {
           z: loadedBuildingsData["z"],
           rotation: loadedBuildingsData["rotation"],
           owner: loadedBuildingsData["owner"],
-          color: [],
+          structures: {},
+          // color: [],
         };
 
         return objectData;
