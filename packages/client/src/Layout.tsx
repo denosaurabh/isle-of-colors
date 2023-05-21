@@ -39,7 +39,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
           id="canvas"
           shadows
           orthographic
-          camera={{ position: [10, 10, 10], zoom: 50, near: 0.0, far: 200 }}
+          camera={{ position: [10, 10, 10], zoom: 50, near: 0.0, far: 150 }}
         >
           <Perf position="top-left" />
 
