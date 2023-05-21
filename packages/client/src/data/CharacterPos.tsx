@@ -27,15 +27,15 @@ export const CharacterPos = () => {
     network: { singletonEntity },
   } = useMUD();
 
-  const counter = useComponentValue(Counter, singletonEntity);
+  // const counter = useComponentValue(Counter, singletonEntity);
   // console.log("counter", counter);
-  useEffect(() => {
-    if (counter) {
-      updateIsChainReady(true);
-    }
-  }, [counter]);
-  // const counter = 1;
-  // updateIsChainReady(true);
+  // useEffect(() => {
+  //   if (counter) {
+  //     updateIsChainReady(true);
+  //   }
+  // }, [counter]);
+  const counter = 1;
+  updateIsChainReady(true);
 
   // TODO : all users position stored but hidden ( shared encrypt setup ), only those users will see location which are closem zkp system
   // TODO : Position update function, check distance, make sure no teleportation, make sure no speed hacks, with zkp, and shared encrypt

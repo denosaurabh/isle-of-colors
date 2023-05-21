@@ -34,7 +34,7 @@ export const Players = () => {
         const playerObj = scene.getObjectByName(getPlayerMeshName(p.name));
 
         if (playerObj) {
-          console.log("lerping pos");
+          // console.log("lerping pos");
           playerObj.position.lerp(
             pos.set(p.position[0], p.position[1], p.position[2]),
             delta

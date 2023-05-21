@@ -12,6 +12,11 @@ export const Forest = () => {
 
   useFrame(() => {
     if (treeSpiritRef.current && worldState.isChainReady) {
+      console.log(
+        "treeSpiritRef.current.position",
+        treeSpiritRef.current.position
+      );
+
       const distance = treeSpiritRef.current.position.distanceTo(
         charPos.set(
           characterState.position[0],
@@ -19,6 +24,8 @@ export const Forest = () => {
           characterState.position[2]
         )
       );
+
+      console.log("distance", distance);
 
       const color = treeSpiritRef.current.userData.color;
       if (distance < 10 && color) {
