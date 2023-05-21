@@ -22,8 +22,6 @@ export const ColorPicker = () => {
         aria-label="Text alignment"
       >
         {Object.entries(colorInventory).map(([color, amount], i) => {
-          if (amount == NaN) return null;
-
           return (
             <ToggleGroup.Item
               key={i}
