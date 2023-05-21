@@ -4,24 +4,42 @@ import {
   increaseStructureColorTransition,
 } from "../state/character";
 import { Color } from "three";
+import {
+  updateObjectStructureColor,
+  worldObjectsState,
+} from "../state/worldObjects";
+import { parseStructureData } from "../utils/object";
 
 const color = new Color();
+const lerpColor = new Color();
 
 export const StructurePainting = () => {
   useFrame(({ scene }) => {
     Object.values(characterState.paintingState).map((p) => {
       if (!p.isPainting || !p.structureName || !p.initialColor) return;
 
-      const structureObj = scene.getObjectByName(p.structureName);
+      // const structureObj = scene.getObjectByName(p.structureName);
 
-      if (!!structureObj && !!structureObj.material) {
-        const mixWithColor = color.set(p.mixWithColor);
-        const alpha = increaseStructureColorTransition(p.structureName);
+      const { modelName, structureName } = parseStructureData(p.structureName);
+      const intitialColor =
+        worldObjectsState.objects[modelName]?.["structures"][structureName] ||
+        "#fff";
+      lerpColor.set(intitialColor);
 
-        if (alpha !== null) {
-          structureObj.material.color.lerp(mixWithColor, alpha);
-        }
+      // if (!!structureObj && !!structureObj.material) {
+      const mixWithColor = color.set(p.mixWithColor);
+      const alpha = increaseStructureColorTransition(p.structureName);
+
+      if (alpha !== null) {
+        console.log(`#${lerpColor.lerp(mixWithColor, alpha).getHexString()}`);
+
+        updateObjectStructureColor(
+          modelName,
+          structureName,
+          `#${lerpColor.lerp(mixWithColor, alpha).getHexString()}`
+        );
       }
+      // }
     });
   });
 

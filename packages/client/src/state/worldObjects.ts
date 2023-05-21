@@ -20,14 +20,17 @@ export type WorldObject = {
   structures: Record<StructureName, StructureColor>;
 };
 
+type ObjectID = string;
+
 type WorldObjectsState = {
-  objects: Array<WorldObject>;
+  objects: Record<ObjectID, WorldObject>;
 };
 
+const defaultObjId = nanoid();
 export const worldObjectsState = proxy<WorldObjectsState>({
-  objects: [
-    {
-      id: nanoid(),
+  objects: {
+    [defaultObjId]: {
+      id: defaultObjId,
       modelUrl: "/cabin.glb",
       x: 0,
       z: 0,
@@ -35,16 +38,26 @@ export const worldObjectsState = proxy<WorldObjectsState>({
       owner: "",
       structures: {},
     },
-  ],
+  },
 });
 
 export const addWorldObjects = (
   // newWorldObjects: Array<Omit<ArrayElement<WorldObjectsState["objects"]>, "id">>
-  newWorldObjects: WorldObjectsState["objects"]
+  newWorldObjects: WorldObject[]
 ) => {
-  const newObjectsData = newWorldObjects.map((nw) => ({ ...nw, id: nanoid() }));
+  newWorldObjects.forEach((nw) => {
+    worldObjectsState.objects[nw.id] = nw;
+  });
+};
 
-  worldObjectsState.objects = [...worldObjectsState.objects, ...newObjectsData];
+export const updateObjectStructureColor = (
+  objectId: string,
+  structureName: StructureName,
+  color: StructureColor
+) => {
+  if (worldObjectsState.objects[objectId]) {
+    worldObjectsState.objects[objectId].structures[structureName] = color;
+  }
 };
 
 export const getClosestWorldObjects = (
@@ -187,10 +200,9 @@ export const moveSavedObjectIntoWorld = () => {
     structures: {},
   }));
 
-  worldObjectsState.objects = [
-    ...worldObjectsState.objects,
-    ...savedWorldObjectsData,
-  ];
+  savedWorldObjectsData.forEach((sw) => {
+    worldObjectsState.objects[sw.id] = sw;
+  });
 
   // discard saved objects
   discardSavedObjects();

@@ -2,6 +2,7 @@ import { Edges, useGLTF } from "@react-three/drei";
 import { RigidBody } from "@react-three/rapier";
 import { nanoid } from "nanoid";
 import { memo } from "react";
+import { getFullStructureName } from "../utils/object";
 
 type ModelProps = {
   url: string;
@@ -58,7 +59,7 @@ export const Model = memo(
             const structureColor = structures[n.name];
 
             const finalColor = structureColor || color;
-            const meshName = getStructureName(id, n.name);
+            const meshName = getFullStructureName(id, n.name);
 
             return (
               <mesh
@@ -87,7 +88,7 @@ export const Model = memo(
                 <meshPhongMaterial color={finalColor} />
 
                 <Edges scale={1} renderOrder={1}>
-                  <meshPhongMaterial color="#333" />
+                  <meshBasicMaterial color="#333" />
                 </Edges>
 
                 {/* <meshPhongMaterial color={color} /> */}
@@ -115,6 +116,3 @@ export const Model = memo(
 );
 
 Model.displayName = "Model" + nanoid();
-
-const getStructureName = (groupName: string, meshName: string) =>
-  `${groupName}-structure-${meshName}`;

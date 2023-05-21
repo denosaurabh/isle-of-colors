@@ -9,28 +9,42 @@ import {
   stopPaintingStructure,
 } from "../state/character";
 import { StructurePainting } from "./StructurePainting";
-import { ComponentProps, useEffect } from "react";
-import { useThree } from "@react-three/fiber";
+import { ComponentProps, memo, useRef } from "react";
+import { useFrame, useThree } from "@react-three/fiber";
+import { Color } from "three";
+import { isEqual } from "lodash";
+import { getFullStructureName } from "../utils/object";
 
 export const WorldObjects = () => {
   const { objects } = useSnapshot(worldObjectsState);
   const closestObjects = getClosestWorldObjects(objects);
 
+  const { scene } = useThree();
+
   const onStructureFocusIn = (structureName: string, currentColor: string) => {
     startPaintingStructure(structureName, currentColor);
   };
 
-  const onStructureFocusOut = (structureName: string) => {
+  const onStructureFocusOut = (structureName: string, objectId: string) => {
     stopPaintingStructure(structureName);
+
+    // const structure = scene.getObjectByName(structureName);
+
+    // console.log("asd", !!structure);
+
+    // if (structure && worldObjectsState.objects[objectId]?.id) {
+    //   // col.set(color);
+    //   // console.log("OBJ", -name, color);
+
+    //   structure.material?.color?.set?.(worldObjectsState.objects[objectId]['']);
+    // }
   };
 
-  if (!objects.length) {
-    return null;
-  }
+  console.log(closestObjects);
 
   return (
     <>
-      {closestObjects.map((obj, i) => {
+      {Object.values(closestObjects).map((obj, i) => {
         return (
           <WorldModel
             key={i}
@@ -42,6 +56,10 @@ export const WorldObjects = () => {
             rotation-y={obj.rotation}
             onStructureFocusIn={onStructureFocusIn}
             onStructureFocusOut={onStructureFocusOut}
+
+            // onStructureFocusOut={(structureName) =>
+            //   onStructureFocusOut(structureName, obj.id)
+            // }
           />
         );
       })}
@@ -51,12 +69,36 @@ export const WorldObjects = () => {
   );
 };
 
-const WorldModel = (props: ComponentProps<typeof Model>) => {
-  const { scene } = useThree();
+const WorldModel = memo(
+  (props: ComponentProps<typeof Model>) => {
+    const structuresRef = useRef(props.structures);
 
-  useEffect(() => {
-    console.log("rerender");
-  }, [props.structures]);
+    useFrame(({ scene }) => {
+      const newStructures = worldObjectsState.objects[props.id].structures;
 
-  return <Model {...props} />;
-};
+      // if (!isEqual(structuresRef.current, newStructures)) {
+      Object.entries(newStructures).map(([name, color]) => {
+        const structure = scene.getObjectByName(
+          getFullStructureName(props.id, name)
+        );
+
+        if (structure) {
+          // col.set(color);
+
+          structure.material?.color?.set?.(color);
+        }
+      });
+
+      structuresRef.current = newStructures;
+      // }
+    });
+
+    return <Model {...props} />;
+  },
+  (oldProps, newProps) => {
+    // don't rerender the component when structures change
+    return oldProps.id === newProps.id && oldProps.url === newProps.url;
+  }
+);
+
+WorldModel.displayName = "WorldModel";

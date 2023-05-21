@@ -14,7 +14,7 @@ type WorldState = {
 export const worldState = proxy<WorldState>({
   numberOfOnlineCharacters: 0,
   isChainReady: false,
-  time: { angle: 0, time: "day" },
+  time: { angle: 0, type: "morning" },
 });
 
 export const updateNumberOfOnlineCharacters = (num: number) => {
