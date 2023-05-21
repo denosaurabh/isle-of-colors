@@ -12,6 +12,7 @@ import { CharacterPos } from "./data/CharacterPos";
 import { PointLight } from "./components/PointLight";
 import { Players } from "./components/Players";
 import { Forest } from "./components/Forest";
+import { Cursor } from "./components/Cursor";
 
 export const App = () => {
   return (
@@ -30,6 +31,7 @@ export const App = () => {
       <Forest />
 
       <CharacterPos />
+      <Cursor />
     </>
   );
 };

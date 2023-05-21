@@ -12,17 +12,20 @@ import { StructurePainting } from "./StructurePainting";
 import { ComponentProps, memo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { getFullStructureName } from "../utils/object";
+import { setGlobalCursor } from "../state/global";
 
 export const WorldObjects = () => {
   const { objects } = useSnapshot(worldObjectsState);
   const closestObjects = getClosestWorldObjects(objects);
 
   const onStructureFocusIn = (structureName: string, currentColor: string) => {
+    setGlobalCursor("pointer");
     startPaintingStructure(structureName, currentColor);
   };
 
   const onStructureFocusOut = (structureName: string) => {
     stopPaintingStructure(structureName);
+    setGlobalCursor("auto");
   };
 
   return (
