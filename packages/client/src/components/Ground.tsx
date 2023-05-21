@@ -7,13 +7,13 @@ import * as THREE from "three";
 import { Reflector, useTexture } from "@react-three/drei";
 
 export const Ground = () => {
-  // const texture = useTexture("/ground.jpg");
+  const texture = useTexture("/noise.avif");
 
-  // texture.wrapS = THREE.RepeatWrapping;
-  // texture.wrapT = THREE.RepeatWrapping;
+  texture.wrapS = THREE.RepeatWrapping;
+  texture.wrapT = THREE.RepeatWrapping;
 
-  // texture.offset.set(0, 0);
-  // texture.repeat.set(20, 20);
+  texture.offset.set(0, 0);
+  texture.repeat.set(20, 20);
 
   return (
     <RigidBody type="fixed" colliders="hull">
@@ -24,14 +24,11 @@ export const Ground = () => {
         castShadow
       >
         <boxGeometry args={[200, 1, 200]} />
-        <meshPhongMaterial color="#999" />
-
-        {/* <meshStandardMaterial
+        <meshPhongMaterial
           // color="#999"
-          // map
-          // map={texture}
-          // {...props}
-        /> */}
+          map={texture}
+          color="#f9ba8b"
+        />
       </mesh>
     </RigidBody>
   );

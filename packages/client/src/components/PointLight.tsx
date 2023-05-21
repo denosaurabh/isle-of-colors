@@ -1,14 +1,40 @@
-import { useSnapshot } from "valtio";
 import { characterState } from "../state/character";
 import { PointMaterial } from "@react-three/drei";
-import { Vector3 } from "three";
-
-const pos = new Vector3();
+import { useFrame } from "@react-three/fiber";
+import { useRef } from "react";
+import { worldState } from "../state/world";
+import { PointLight as PointLightT } from "three";
 
 export const PointLight = () => {
-  const { position } = useSnapshot(characterState);
+  const ref = useRef<PointLightT>();
+  // const { position } = useSnapshot(characterState);
 
-  return <></>;
+  useFrame(() => {
+    if (ref.current) {
+      if (worldState.time.type === "midnight") {
+        ref.current.intensity = 1;
+      } else {
+        ref.current.intensity = 0;
+      }
+
+      ref.current.position.set(
+        characterState.position[0],
+        characterState.position[1] + 5,
+        characterState.position[2]
+      );
+    }
+  });
+
+  return (
+    <>
+      <pointLight
+        ref={ref}
+        color="transparent"
+        distance={10}
+        // decay={10}
+      />
+    </>
+  );
 
   return (
     <mesh position={position}>

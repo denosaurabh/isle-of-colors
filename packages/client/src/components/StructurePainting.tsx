@@ -1,6 +1,7 @@
 import { useFrame } from "@react-three/fiber";
 import {
   characterState,
+  decreaseActiveColorQuantity,
   increaseStructureColorTransition,
 } from "../state/character";
 import { Color } from "three";
@@ -19,6 +20,8 @@ export const StructurePainting = () => {
         const alpha = increaseStructureColorTransition(p.structureName);
 
         structureObj.material.color.lerp(mixWithColor, alpha);
+
+        decreaseActiveColorQuantity();
       }
     });
   });

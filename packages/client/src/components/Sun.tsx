@@ -22,7 +22,7 @@ export const Sun = memo(() => {
   useFrame(({ clock }) => {
     const angle = Number(
       (
-        (clock.elapsedTime % DAY_NIGHT_CYCLE_SECONDS) *
+        ((clock.elapsedTime + 50) % DAY_NIGHT_CYCLE_SECONDS) *
         (360 / DAY_NIGHT_CYCLE_SECONDS)
       ).toFixed(2)
     );

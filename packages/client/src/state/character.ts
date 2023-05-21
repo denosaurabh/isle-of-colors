@@ -38,7 +38,7 @@ export const characterState = proxy<CharacterState>({
   allowUpdate: false,
 
   activeActionMode: "paint",
-  activeColor: "black",
+  activeColor: "#000",
   colorInventory: { "#000": 500, pink: 500 },
 
   paintingState: {},
@@ -54,6 +54,10 @@ export const allowUpdate = (allow: boolean) => {
 
 export const updateCharacterId = (id: string) => {
   characterState.id = id;
+};
+
+export const decreaseActiveColorQuantity = (quantity = 0.5) => {
+  characterState.colorInventory[characterState.activeColor] -= quantity;
 };
 
 export const setActiveActionMode = (

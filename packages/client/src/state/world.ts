@@ -70,7 +70,7 @@ export const lerpNumber = (angle: number) => {
     normalizedIntensity = 1 - (angle - 90) / (230 - 90);
   } else if (angle <= 340) {
     // Light intensity is 0
-    normalizedIntensity = 0.04;
+    normalizedIntensity = 0;
   } else {
     // Transition from 0 to 1 between 340deg and 360deg (same as 0deg)
     normalizedIntensity = (angle - 340) / (360 - 340);
