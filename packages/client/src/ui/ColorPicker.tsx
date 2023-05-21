@@ -12,7 +12,13 @@ export const ColorPicker = () => {
         type="single"
         // defaultValue="center"
         value={activeColor}
-        onValueChange={setActiveColor}
+        onValueChange={(val) => {
+          if (!val) {
+            return;
+          }
+
+          setActiveColor(val);
+        }}
         aria-label="Text alignment"
       >
         {Object.entries(colorInventory).map(([color, amount], i) => {

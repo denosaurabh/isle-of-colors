@@ -19,7 +19,7 @@ export const PointLight = () => {
 
       ref.current.position.set(
         characterState.position[0],
-        characterState.position[1] + 5,
+        characterState.position[1] + 1,
         characterState.position[2]
       );
     }
