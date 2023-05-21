@@ -39,7 +39,7 @@ export const characterState = proxy<CharacterState>({
 
   activeActionMode: "paint",
   activeColor: "#000",
-  colorInventory: { "#000": 500, pink: 500 },
+  colorInventory: { "#000": 500, pink: 50 },
 
   paintingState: {},
 });
@@ -57,7 +57,12 @@ export const updateCharacterId = (id: string) => {
 };
 
 export const decreaseActiveColorQuantity = (quantity = 0.5) => {
-  characterState.colorInventory[characterState.activeColor] -= quantity;
+  if (characterState.colorInventory[characterState.activeColor] <= 0) {
+    return 0;
+  }
+
+  return (characterState.colorInventory[characterState.activeColor] -=
+    quantity);
 };
 
 export const setActiveActionMode = (
@@ -76,6 +81,10 @@ export const startPaintingStructure = (
 ) => {
   switch (characterState.activeActionMode) {
     case "paint": {
+      if (characterState.colorInventory[characterState.activeColor] <= 0) {
+        return;
+      }
+
       startApplyingPaintOnStructure(structureName, currentColor);
       break;
     }
@@ -122,7 +131,15 @@ export const stopPaintingStructure = (structureName: string) => {
   delete characterState.paintingState[structureName];
 };
 
-export const increaseStructureColorTransition = (structureName: string) => {
+export const increaseStructureColorTransition = (
+  structureName: string
+): number | null => {
+  const newQuantity = decreaseActiveColorQuantity();
+
+  if (newQuantity <= 0) {
+    return null;
+  }
+
   const p = characterState.paintingState[structureName];
 
   const updatedTransitionAmount =
