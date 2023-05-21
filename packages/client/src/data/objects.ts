@@ -12,4 +12,9 @@ export const OBJECTS_DATA = [
     // url: "/hut1.glb",
     url: "https://nftstorage.link/ipfs/bafybeibl4xyyokui2u4bammvvsueey4ntcsppwxxoycroxh5ykxug3k5hq",
   },
+  {
+    id: nanoid(),
+    name: "Hut2",
+    url: "/hut2.glb",
+  },
 ];
