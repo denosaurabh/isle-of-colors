@@ -7,7 +7,7 @@ import {
   userObjectsState,
 } from "../state/worldObjects";
 import { useMUD } from "../MUDContext";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { worldState } from "../state/world";
 import { Has, getComponentValueStrict } from "@latticexyz/recs";
 import { useEntityQuery } from "@latticexyz/react";
@@ -22,12 +22,29 @@ export const Footer = () => {
 
   const { numberOfOnlineCharacters, isChainReady } = useSnapshot(worldState);
   const allBuildingsIds = useEntityQuery([Has(Buildings)]);
+
+  const hasFetched = useRef(false)
   useEffect(() => {
-    if (isChainReady) {
+    if (isChainReady && !hasFetched.current) {
+
       // console.log("allBuildingsIds", allBuildingsIds);
       const newWorldObjects = allBuildingsIds.map((id) => {
         const loadedBuildingsData = getComponentValueStrict(Buildings, id);
-        // console.log("loadedBuildingsData", loadedBuildingsData);
+        // console.log("loadedBuildingsData", loadedBuildingsDataw);
+
+        let names = loadedBuildingsData["structuresName"].split(',');
+        let colors = loadedBuildingsData["structuresColor"].split(',');
+
+        if (names.length !== colors.length) {
+            throw new Error('Lists have different lengths');
+        }
+
+        let structuresObject = {};
+
+        for (var i = 0; i < names.length; i++) {
+          structuresObject[names[i]] = colors[i];
+        }
+
 
         const objectData: WorldObject = {
           id: id,
@@ -36,7 +53,7 @@ export const Footer = () => {
           z: loadedBuildingsData["z"],
           rotation: loadedBuildingsData["rotation"],
           owner: loadedBuildingsData["owner"],
-          structures: {},
+          structures: structuresObject,
           // color: [],
         };
 
@@ -44,6 +61,8 @@ export const Footer = () => {
       });
 
       addWorldObjects(newWorldObjects);
+
+      hasFetched.current = true
     }
   }, [allBuildingsIds]);
 
@@ -51,19 +70,25 @@ export const Footer = () => {
     // disbale transform control
     const savedObjectsProxy = saveDraftObjects(draftObjects.map((d) => d.id));
 
-    // const savedObjects = draftObjects.filter((d) => d.status === "saved");
+    // // const savedObjects = draftObjects.filter((d) => d.status === "saved");
 
     const savedObjects = JSON.parse(JSON.stringify({ a: savedObjectsProxy }));
 
-    // console.log("savedObjects", savedObjects.a); // id, url, ower address, rotaton, x, z, ( color list empty , amount list empty)
+    
+    // // console.log("savedObjects", savedObjects.a); // id, url, ower address, rotaton, x, z, ( color list empty , amount list empty)
 
     savedObjects.a.forEach((obj: any) => {
+      // console.log("structures", obj);
+
       addBuildingsMud(
         Math.round(Number(obj["x"])),
         Math.round(Number(obj["z"])),
         Math.round(Number(obj["rotation"])),
         obj["id"],
-        obj["objectData"]["url"]
+        obj["objectData"]["url"],
+        "",
+        ""
+        // Object.keys(obj['structures']).join('|||||')
       );
     });
 

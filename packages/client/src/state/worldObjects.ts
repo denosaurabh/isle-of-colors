@@ -56,7 +56,7 @@ export const updateObjectStructureColor = (
   color: StructureColor
 ) => {
   if (worldObjectsState.objects[objectId]) {
-    worldObjectsState.objects[objectId].structures[structureName] = color;
+    worldObjectsState.objects[objectId].structures = {... worldObjectsState.objects[objectId].structures, [structureName]: color};
   }
 };
 

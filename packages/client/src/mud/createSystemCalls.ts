@@ -46,9 +46,19 @@ export function createSystemCalls(
     z: number,
     rotation: number,
     id: string,
-    url: string
+    url: string,
+    structuresName: string,
+    structuresColor : string
   ) => {
-    worldSend("addBuildingsMud", [x, z, rotation, id, url]);
+    worldSend("addBuildingsMud", [x, z, rotation, id, url, structuresName, structuresColor]);
+  };
+
+  const updateBuildingsMud = (
+    id : string,
+    structuresName : string,
+    structuresColor : string
+  ) => {
+    worldSend("updateBuildingsMud", [id, structuresName, structuresColor]);
   };
 
   return {
@@ -57,5 +67,6 @@ export function createSystemCalls(
     updateCharacterPositionMud,
     getCurrentCharacterIdMud,
     addBuildingsMud,
+    updateBuildingsMud
   };
 }

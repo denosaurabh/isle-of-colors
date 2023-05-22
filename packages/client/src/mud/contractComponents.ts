@@ -47,6 +47,8 @@ export function defineContractComponents(world: World) {
           rotation: RecsType.Number,
           id: RecsType.String,
           url: RecsType.String,
+          structuresName: RecsType.String,
+          structuresColor: RecsType.String,
         },
         {
           metadata: {

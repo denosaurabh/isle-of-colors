@@ -26,17 +26,21 @@ struct BuildingsData {
   int32 rotation;
   bytes32 id;
   string url;
+  string structuresName;
+  string structuresColor;
 }
 
 library Buildings {
   /** Get the table's schema */
   function getSchema() internal pure returns (Schema) {
-    SchemaType[] memory _schema = new SchemaType[](5);
+    SchemaType[] memory _schema = new SchemaType[](7);
     _schema[0] = SchemaType.INT32;
     _schema[1] = SchemaType.INT32;
     _schema[2] = SchemaType.INT32;
     _schema[3] = SchemaType.BYTES32;
     _schema[4] = SchemaType.STRING;
+    _schema[5] = SchemaType.STRING;
+    _schema[6] = SchemaType.STRING;
 
     return SchemaLib.encode(_schema);
   }
@@ -50,12 +54,14 @@ library Buildings {
 
   /** Get the table's metadata */
   function getMetadata() internal pure returns (string memory, string[] memory) {
-    string[] memory _fieldNames = new string[](5);
+    string[] memory _fieldNames = new string[](7);
     _fieldNames[0] = "x";
     _fieldNames[1] = "z";
     _fieldNames[2] = "rotation";
     _fieldNames[3] = "id";
     _fieldNames[4] = "url";
+    _fieldNames[5] = "structuresName";
+    _fieldNames[6] = "structuresColor";
     return ("Buildings", _fieldNames);
   }
 
@@ -335,6 +341,242 @@ library Buildings {
     _store.updateInField(_tableId, _keyTuple, 4, _index * 1, bytes((_slice)));
   }
 
+  /** Get structuresName */
+  function getStructuresName(bytes32 key) internal view returns (string memory structuresName) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 5);
+    return (string(_blob));
+  }
+
+  /** Get structuresName (using the specified store) */
+  function getStructuresName(IStore _store, bytes32 key) internal view returns (string memory structuresName) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    bytes memory _blob = _store.getField(_tableId, _keyTuple, 5);
+    return (string(_blob));
+  }
+
+  /** Set structuresName */
+  function setStructuresName(bytes32 key, string memory structuresName) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    StoreSwitch.setField(_tableId, _keyTuple, 5, bytes((structuresName)));
+  }
+
+  /** Set structuresName (using the specified store) */
+  function setStructuresName(IStore _store, bytes32 key, string memory structuresName) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    _store.setField(_tableId, _keyTuple, 5, bytes((structuresName)));
+  }
+
+  /** Get the length of structuresName */
+  function lengthStructuresName(bytes32 key) internal view returns (uint256) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    uint256 _byteLength = StoreSwitch.getFieldLength(_tableId, _keyTuple, 5, getSchema());
+    return _byteLength / 1;
+  }
+
+  /** Get the length of structuresName (using the specified store) */
+  function lengthStructuresName(IStore _store, bytes32 key) internal view returns (uint256) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    uint256 _byteLength = _store.getFieldLength(_tableId, _keyTuple, 5, getSchema());
+    return _byteLength / 1;
+  }
+
+  /** Get an item of structuresName (unchecked, returns invalid data if index overflows) */
+  function getItemStructuresName(bytes32 key, uint256 _index) internal view returns (string memory) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    bytes memory _blob = StoreSwitch.getFieldSlice(_tableId, _keyTuple, 5, getSchema(), _index * 1, (_index + 1) * 1);
+    return (string(_blob));
+  }
+
+  /** Get an item of structuresName (using the specified store) (unchecked, returns invalid data if index overflows) */
+  function getItemStructuresName(IStore _store, bytes32 key, uint256 _index) internal view returns (string memory) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    bytes memory _blob = _store.getFieldSlice(_tableId, _keyTuple, 5, getSchema(), _index * 1, (_index + 1) * 1);
+    return (string(_blob));
+  }
+
+  /** Push a slice to structuresName */
+  function pushStructuresName(bytes32 key, string memory _slice) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    StoreSwitch.pushToField(_tableId, _keyTuple, 5, bytes((_slice)));
+  }
+
+  /** Push a slice to structuresName (using the specified store) */
+  function pushStructuresName(IStore _store, bytes32 key, string memory _slice) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    _store.pushToField(_tableId, _keyTuple, 5, bytes((_slice)));
+  }
+
+  /** Pop a slice from structuresName */
+  function popStructuresName(bytes32 key) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    StoreSwitch.popFromField(_tableId, _keyTuple, 5, 1);
+  }
+
+  /** Pop a slice from structuresName (using the specified store) */
+  function popStructuresName(IStore _store, bytes32 key) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    _store.popFromField(_tableId, _keyTuple, 5, 1);
+  }
+
+  /** Update a slice of structuresName at `_index` */
+  function updateStructuresName(bytes32 key, uint256 _index, string memory _slice) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    StoreSwitch.updateInField(_tableId, _keyTuple, 5, _index * 1, bytes((_slice)));
+  }
+
+  /** Update a slice of structuresName (using the specified store) at `_index` */
+  function updateStructuresName(IStore _store, bytes32 key, uint256 _index, string memory _slice) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    _store.updateInField(_tableId, _keyTuple, 5, _index * 1, bytes((_slice)));
+  }
+
+  /** Get structuresColor */
+  function getStructuresColor(bytes32 key) internal view returns (string memory structuresColor) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 6);
+    return (string(_blob));
+  }
+
+  /** Get structuresColor (using the specified store) */
+  function getStructuresColor(IStore _store, bytes32 key) internal view returns (string memory structuresColor) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    bytes memory _blob = _store.getField(_tableId, _keyTuple, 6);
+    return (string(_blob));
+  }
+
+  /** Set structuresColor */
+  function setStructuresColor(bytes32 key, string memory structuresColor) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    StoreSwitch.setField(_tableId, _keyTuple, 6, bytes((structuresColor)));
+  }
+
+  /** Set structuresColor (using the specified store) */
+  function setStructuresColor(IStore _store, bytes32 key, string memory structuresColor) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    _store.setField(_tableId, _keyTuple, 6, bytes((structuresColor)));
+  }
+
+  /** Get the length of structuresColor */
+  function lengthStructuresColor(bytes32 key) internal view returns (uint256) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    uint256 _byteLength = StoreSwitch.getFieldLength(_tableId, _keyTuple, 6, getSchema());
+    return _byteLength / 1;
+  }
+
+  /** Get the length of structuresColor (using the specified store) */
+  function lengthStructuresColor(IStore _store, bytes32 key) internal view returns (uint256) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    uint256 _byteLength = _store.getFieldLength(_tableId, _keyTuple, 6, getSchema());
+    return _byteLength / 1;
+  }
+
+  /** Get an item of structuresColor (unchecked, returns invalid data if index overflows) */
+  function getItemStructuresColor(bytes32 key, uint256 _index) internal view returns (string memory) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    bytes memory _blob = StoreSwitch.getFieldSlice(_tableId, _keyTuple, 6, getSchema(), _index * 1, (_index + 1) * 1);
+    return (string(_blob));
+  }
+
+  /** Get an item of structuresColor (using the specified store) (unchecked, returns invalid data if index overflows) */
+  function getItemStructuresColor(IStore _store, bytes32 key, uint256 _index) internal view returns (string memory) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    bytes memory _blob = _store.getFieldSlice(_tableId, _keyTuple, 6, getSchema(), _index * 1, (_index + 1) * 1);
+    return (string(_blob));
+  }
+
+  /** Push a slice to structuresColor */
+  function pushStructuresColor(bytes32 key, string memory _slice) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    StoreSwitch.pushToField(_tableId, _keyTuple, 6, bytes((_slice)));
+  }
+
+  /** Push a slice to structuresColor (using the specified store) */
+  function pushStructuresColor(IStore _store, bytes32 key, string memory _slice) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    _store.pushToField(_tableId, _keyTuple, 6, bytes((_slice)));
+  }
+
+  /** Pop a slice from structuresColor */
+  function popStructuresColor(bytes32 key) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    StoreSwitch.popFromField(_tableId, _keyTuple, 6, 1);
+  }
+
+  /** Pop a slice from structuresColor (using the specified store) */
+  function popStructuresColor(IStore _store, bytes32 key) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    _store.popFromField(_tableId, _keyTuple, 6, 1);
+  }
+
+  /** Update a slice of structuresColor at `_index` */
+  function updateStructuresColor(bytes32 key, uint256 _index, string memory _slice) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    StoreSwitch.updateInField(_tableId, _keyTuple, 6, _index * 1, bytes((_slice)));
+  }
+
+  /** Update a slice of structuresColor (using the specified store) at `_index` */
+  function updateStructuresColor(IStore _store, bytes32 key, uint256 _index, string memory _slice) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    _store.updateInField(_tableId, _keyTuple, 6, _index * 1, bytes((_slice)));
+  }
+
   /** Get the full data */
   function get(bytes32 key) internal view returns (BuildingsData memory _table) {
     bytes32[] memory _keyTuple = new bytes32[](1);
@@ -354,8 +596,17 @@ library Buildings {
   }
 
   /** Set the full data using individual values */
-  function set(bytes32 key, int32 x, int32 z, int32 rotation, bytes32 id, string memory url) internal {
-    bytes memory _data = encode(x, z, rotation, id, url);
+  function set(
+    bytes32 key,
+    int32 x,
+    int32 z,
+    int32 rotation,
+    bytes32 id,
+    string memory url,
+    string memory structuresName,
+    string memory structuresColor
+  ) internal {
+    bytes memory _data = encode(x, z, rotation, id, url, structuresName, structuresColor);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
@@ -364,8 +615,18 @@ library Buildings {
   }
 
   /** Set the full data using individual values (using the specified store) */
-  function set(IStore _store, bytes32 key, int32 x, int32 z, int32 rotation, bytes32 id, string memory url) internal {
-    bytes memory _data = encode(x, z, rotation, id, url);
+  function set(
+    IStore _store,
+    bytes32 key,
+    int32 x,
+    int32 z,
+    int32 rotation,
+    bytes32 id,
+    string memory url,
+    string memory structuresName,
+    string memory structuresColor
+  ) internal {
+    bytes memory _data = encode(x, z, rotation, id, url, structuresName, structuresColor);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
@@ -375,12 +636,22 @@ library Buildings {
 
   /** Set the full data using the data struct */
   function set(bytes32 key, BuildingsData memory _table) internal {
-    set(key, _table.x, _table.z, _table.rotation, _table.id, _table.url);
+    set(key, _table.x, _table.z, _table.rotation, _table.id, _table.url, _table.structuresName, _table.structuresColor);
   }
 
   /** Set the full data using the data struct (using the specified store) */
   function set(IStore _store, bytes32 key, BuildingsData memory _table) internal {
-    set(_store, key, _table.x, _table.z, _table.rotation, _table.id, _table.url);
+    set(
+      _store,
+      key,
+      _table.x,
+      _table.z,
+      _table.rotation,
+      _table.id,
+      _table.url,
+      _table.structuresName,
+      _table.structuresColor
+    );
   }
 
   /** Decode the tightly packed blob using this table's schema */
@@ -405,6 +676,14 @@ library Buildings {
       _start = _end;
       _end += _encodedLengths.atIndex(0);
       _table.url = (string(SliceLib.getSubslice(_blob, _start, _end).toBytes()));
+
+      _start = _end;
+      _end += _encodedLengths.atIndex(1);
+      _table.structuresName = (string(SliceLib.getSubslice(_blob, _start, _end).toBytes()));
+
+      _start = _end;
+      _end += _encodedLengths.atIndex(2);
+      _table.structuresColor = (string(SliceLib.getSubslice(_blob, _start, _end).toBytes()));
     }
   }
 
@@ -414,13 +693,27 @@ library Buildings {
     int32 z,
     int32 rotation,
     bytes32 id,
-    string memory url
+    string memory url,
+    string memory structuresName,
+    string memory structuresColor
   ) internal view returns (bytes memory) {
-    uint40[] memory _counters = new uint40[](1);
+    uint40[] memory _counters = new uint40[](3);
     _counters[0] = uint40(bytes(url).length);
+    _counters[1] = uint40(bytes(structuresName).length);
+    _counters[2] = uint40(bytes(structuresColor).length);
     PackedCounter _encodedLengths = PackedCounterLib.pack(_counters);
 
-    return abi.encodePacked(x, z, rotation, id, _encodedLengths.unwrap(), bytes((url)));
+    return
+      abi.encodePacked(
+        x,
+        z,
+        rotation,
+        id,
+        _encodedLengths.unwrap(),
+        bytes((url)),
+        bytes((structuresName)),
+        bytes((structuresColor))
+      );
   }
 
   /** Encode keys as a bytes32 array using this table's schema */

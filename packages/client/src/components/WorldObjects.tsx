@@ -1,10 +1,12 @@
 import { useSnapshot } from "valtio";
 import {
+  WorldObject,
   getClosestWorldObjects,
   worldObjectsState,
 } from "../state/worldObjects";
 import { Model } from "./Model";
 import {
+  characterState,
   startPaintingStructure,
   stopPaintingStructure,
 } from "../state/character";
@@ -13,24 +15,78 @@ import { ComponentProps, memo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { getFullStructureName } from "../utils/object";
 import { setGlobalCursor } from "../state/global";
+import { useMUD } from "../MUDContext";
+import { useEntityQuery } from "@latticexyz/react";
+import { Has } from "@latticexyz/recs";
 
 export const WorldObjects = () => {
   const { objects } = useSnapshot(worldObjectsState);
   const closestObjects = getClosestWorldObjects(objects);
+  const {
+    components: { Buildings },
+    systemCalls: { updateBuildingsMud, addBuildingsMud },
+    network: { singletonEntity },
+  } = useMUD();
+
+  const allBuildingsIds = useEntityQuery([Has(Buildings)]);
+
 
   const onStructureFocusIn = (structureName: string, currentColor: string) => {
     setGlobalCursor("pointer");
     startPaintingStructure(structureName, currentColor);
   };
 
-  const onStructureFocusOut = (structureName: string) => {
+  const onStructureFocusOut = (structureName: string, obj: WorldObject['id']) => {
+    if (!characterState.paintingState[structureName]?.isPainting) return
+
     stopPaintingStructure(structureName);
     setGlobalCursor("auto");
+
+    // update object in mud
+    const updatedObj = worldObjectsState.objects[obj];
+    // console.log("updatedObj", Object.keys(updatedObj['structures']).join(","));
+    // console.log("updatedObj", updatedObj);
+    // console.log("allBuildingsIds", allBuildingsIds);
+
+    for (let i in allBuildingsIds) {
+      // console.log("buildingId", buildingId);
+      let buildingId = allBuildingsIds[i];
+
+    // console.log("ascii", buildingId, updatedObj['id']);
+    // console.log("buildingId", buildingId, updatedObj['id']);
+
+    if (buildingId == updatedObj['id']) {
+    // console.log("updatedObj", updatedObj['structures']);
+    // console.log("updatedObj", updatedObj['id'], Object.keys(updatedObj['structures']).join(","));
+
+      let hexParts = buildingId.match(/.{1,2}/g);
+      // console.log("hexParts", hexParts);
+      let ascii = hexParts.map(function(hexPart) {
+        let charCode = parseInt(hexPart, 16);
+          // ignore non-printable characters and padding zeroes
+          if (charCode > 31 && charCode != 127) {
+              return String.fromCharCode(charCode);
+          } else {
+              return '';
+          }
+      }).join('');
+
+    updateBuildingsMud(
+        // buildingId,
+        ascii,
+        Object.keys(updatedObj['structures']).join(","),
+        Object.values(updatedObj['structures']).join(",")
+        // "this"
+        );
+    }
+  }
   };
 
   return (
     <>
       {Object.values(closestObjects).map((obj, i) => {
+if (!obj.modelUrl) return null
+
         return (
           <WorldModel
             key={i}
@@ -41,11 +97,10 @@ export const WorldObjects = () => {
             position-z={obj.z}
             rotation-y={obj.rotation}
             onStructureFocusIn={onStructureFocusIn}
-            onStructureFocusOut={onStructureFocusOut}
-
-            // onStructureFocusOut={(structureName) =>
-            //   onStructureFocusOut(structureName, obj.id)
-            // }
+            // onStructureFocusOut={onStructureFocusOut}
+            onStructureFocusOut={(structureName) =>
+              onStructureFocusOut(structureName, obj.id)
+            }
           />
         );
       })}

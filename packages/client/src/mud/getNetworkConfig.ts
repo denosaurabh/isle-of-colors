@@ -38,10 +38,10 @@ export async function getNetworkConfig(): Promise<NetworkConfig> {
     },
     provider: {
       chainId,
-      // jsonRpcUrl: params.get("rpc") ?? chain.rpcUrls.default.http[0],
-      // wsRpcUrl: params.get("wsRpc") ?? chain.rpcUrls.default.webSocket?.[0],
-      jsonRpcUrl: "http://localhost:8545", //params.get("rpc") ?? chain.rpcUrls.default.http[0],
-      wsRpcUrl: "", // params.get("wsRpc") ?? chain.rpcUrls.default.webSocket?.[0],
+      jsonRpcUrl: params.get("rpc") ?? chain.rpcUrls.default.http[0],
+      wsRpcUrl: params.get("wsRpc") ?? chain.rpcUrls.default.webSocket?.[0],
+      // jsonRpcUrl: "http://localhost:8545", //params.get("rpc") ?? chain.rpcUrls.default.http[0],
+      // wsRpcUrl: "", // params.get("wsRpc") ?? chain.rpcUrls.default.webSocket?.[0],
     },
     privateKey: getBurnerWallet().value,
     chainId,
@@ -50,6 +50,6 @@ export async function getNetworkConfig(): Promise<NetworkConfig> {
     worldAddress,
     initialBlockNumber,
     snapSync: params.get("snapSync") === "true",
-    disableCache: true,
+    disableCache: params.get("cache") === "false",
   };
 }
