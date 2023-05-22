@@ -39,7 +39,14 @@ export const characterState = proxy<CharacterState>({
 
   activeActionMode: "paint",
   activeColor: "#000",
-  colorInventory: { "#000": 500, pink: 50 },
+  colorInventory: {
+    "#000": 500,
+    pink: 50,
+    orange: 1000,
+    // voilet: 1000,
+    white: 1000,
+    purple: 1000,
+  },
 
   paintingState: {},
 });

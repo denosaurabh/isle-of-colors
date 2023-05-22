@@ -33,14 +33,14 @@ export const ActionsPicker = () => {
           value="paint"
           aria-label="Left aligned"
         >
-          P
+          Paint
         </ToggleGroup.Item>
         <ToggleGroup.Item
           className={toggleGroupItemClasses}
           value="scoop"
           aria-label="Center aligned"
         >
-          S
+          Scoop
         </ToggleGroup.Item>
       </ToggleGroup.Root>
     </div>
@@ -48,4 +48,4 @@ export const ActionsPicker = () => {
 };
 
 const toggleGroupItemClasses =
-  "hover:bg-violet3 color-mauve11 data-[state=on]:bg-violet6 data-[state=on]:text-violet12 flex h-[35px] w-[35px] items-center justify-center bg-white text-base leading-4 first:rounded-l last:rounded-r focus:z-10 focus:shadow-[0_0_0_2px] focus:shadow-black focus:outline-none";
+  "hover:bg-slate-200 color-mauve11 data-[state=on]:bg-slate-600 data-[state=on]:text-slate-100 flex h-[35px] w-fit px-3 items-center justify-center bg-white text-base leading-4 first:rounded-l last:rounded-r focus:z-10 focus:shadow-[0_0_0_2px] focus:shadow-black focus:outline-none";

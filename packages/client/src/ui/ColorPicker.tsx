@@ -29,7 +29,7 @@ export const ColorPicker = () => {
               value={color}
               style={{ backgroundColor: color }}
             >
-              {amount.toFixed(0)}
+              <div className={amountClassName}>{amount.toFixed(0)}</div>
             </ToggleGroup.Item>
           );
         })}
@@ -39,4 +39,7 @@ export const ColorPicker = () => {
 };
 
 const toggleGroupItemClasses =
-  "hover:bg-violet3 color-mauve11 data-[state=on]:bg-violet6 data-[state=on]:text-violet12 flex h-[45px] w-[45px] items-center justify-center bg-white text-base leading-4 rounded-md focus:z-10 focus:shadow-[0_0_0_2px] focus:shadow-black focus:outline-none";
+  "relative hover:bg-violet3 color-mauve11 data-[state=on]:bg-violet6 data-[state=on]:text-violet12 flex h-[45px] w-[45px] items-center justify-center bg-white text-base leading-4 rounded-md focus:z-10 focus:shadow-[0_0_0_2px] focus:shadow-black focus:outline-none";
+
+const amountClassName =
+  "absolute top-[-10px] right-[-10px] bg-slate-100 font-light p-1 rounded-md shadow-md";

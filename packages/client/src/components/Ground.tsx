@@ -6,14 +6,22 @@ import { Ice } from "./Ice";
 import * as THREE from "three";
 import { Reflector, useTexture } from "@react-three/drei";
 
+import "../shaders/ground";
+
 export const Ground = () => {
-  const texture = useTexture("/noise.avif");
+  const [texture, tex2] = useTexture(["/noise-tex.jpg", "noise_pattern_3.jpg"]);
 
   texture.wrapS = THREE.RepeatWrapping;
   texture.wrapT = THREE.RepeatWrapping;
 
   texture.offset.set(0, 0);
   texture.repeat.set(20, 20);
+
+  tex2.wrapS = THREE.RepeatWrapping;
+  tex2.wrapT = THREE.RepeatWrapping;
+
+  tex2.offset.set(0, 0);
+  tex2.repeat.set(20, 20);
 
   return (
     <RigidBody type="fixed" colliders="hull">
@@ -25,10 +33,14 @@ export const Ground = () => {
       >
         <boxGeometry args={[200, 1, 200]} />
         <meshPhongMaterial
-        // color="#999"
-        // map={texture}
-        // color="#f9ba8b"
+          // color="#999"
+          map={texture}
+          // color="#f9ba8b"
+          // color="#e7bced"
         />
+        <meshPhongMaterial map={tex2} color="#b0dbcf" />
+
+        {/* <groundMaterial /> */}
       </mesh>
     </RigidBody>
   );

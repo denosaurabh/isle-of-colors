@@ -7,6 +7,7 @@ import { KeyboardControls } from "@react-three/drei";
 import { UI } from "./ui";
 
 import { Perf } from "r3f-perf";
+import { Effects } from "./components/Effects";
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   // const {
@@ -51,10 +52,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
 
               <axesHelper scale={100} />
 
-              <EffectComposer>
-                <Noise opacity={0.4} premultiply />
-                <Vignette eskil={false} offset={0.1} darkness={0.3} />
-              </EffectComposer>
+              <Effects />
             </Physics>
           </Suspense>
         </Canvas>
