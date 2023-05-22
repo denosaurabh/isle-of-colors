@@ -26,18 +26,18 @@ type WorldObjectsState = {
   objects: Record<ObjectID, WorldObject>;
 };
 
-const defaultObjId = nanoid();
+// const defaultObjId = nanoid();
 export const worldObjectsState = proxy<WorldObjectsState>({
   objects: {
-    [defaultObjId]: {
-      id: defaultObjId,
-      modelUrl: "/cabin.glb",
-      x: 0,
-      z: 0,
-      rotation: 0,
-      owner: "",
-      structures: {},
-    },
+    // [defaultObjId]: {
+    //   id: defaultObjId,
+    //   modelUrl: "/cabin.glb",
+    //   x: 0,
+    //   z: 0,
+    //   rotation: 0,
+    //   owner: "",
+    //   structures: {},
+    // },
   },
 });
 
@@ -56,7 +56,10 @@ export const updateObjectStructureColor = (
   color: StructureColor
 ) => {
   if (worldObjectsState.objects[objectId]) {
-    worldObjectsState.objects[objectId].structures = {... worldObjectsState.objects[objectId].structures, [structureName]: color};
+    worldObjectsState.objects[objectId].structures = {
+      ...worldObjectsState.objects[objectId].structures,
+      [structureName]: color,
+    };
   }
 };
 

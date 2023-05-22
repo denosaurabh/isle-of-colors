@@ -38,8 +38,8 @@ export const Forest = () => {
     >
       {/* <TreeSpirit color="orange" name="tree-spirit" /> */}
 
-      <Model id={nanoid()} url="/plants.glb" />
-      <Model id={nanoid()} url="/rocks.glb" />
+      <Model id={nanoid()} url="/forest.glb" />
+      {/* <Model id={nanoid()} url="/rocks.glb" /> */}
     </group>
   );
 };

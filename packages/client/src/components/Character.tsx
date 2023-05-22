@@ -7,11 +7,13 @@ import {
   useRapier,
   vec3,
 } from "@react-three/rapier";
-import { useEffect, useRef } from "react";
+import { forwardRef, useEffect, useRef } from "react";
 import { characterState, updateCharacterPosition } from "../state/character";
 import { subscribe, useSnapshot } from "valtio";
 import * as THREE from "three";
 import { subscribeKey } from "valtio/utils";
+import { Model } from "./Model";
+import { Edges, useGLTF } from "@react-three/drei";
 
 const useKeyboard = () => {
   const keysDown = useRef({});
@@ -134,7 +136,8 @@ export const Character = () => {
           angleYCameraDirection + directionOffset
         );
         // TODO:
-        characterRef.current.quaternion.rotateTowards(rotateQuarternion, 0.2);
+        // characterRef.current.quaternion.rotateTowards(rotateQuarternion, 0.2);
+        characterRef.current.quaternion.slerp(rotateQuarternion, delta * 4);
 
         // calculate direction
         camera.getWorldDirection(walkDirection);
@@ -186,7 +189,7 @@ export const Character = () => {
 
         if (characterState.allowUpdate) {
           position.add(vec3(correctedMovement));
-          updateCharacterPosition([position.x, position.y, position.z]);
+          updateCharacterPosition([position.x, position.y + 4, position.z]);
         }
         body.current.setNextKinematicTranslation(position);
       } catch (err) {
@@ -200,18 +203,107 @@ export const Character = () => {
       type="kinematicPosition"
       colliders={false}
       ref={body}
-      position={[0, 10, 0]}
+      position={[0, 0.6, 0]}
     >
-      <mesh name="character" ref={characterRef}>
-        <boxGeometry args={[0.5, 1, 0.3]} />
-        <meshBasicMaterial color="black" />
-      </mesh>
+      <CharacterModel ref={characterRef} />
+
+      {/* <mesh name="character" ref={characterRef}> */}
+      {/* <boxGeometry args={[0.5, 1, 0.3]} /> */}
+      {/* <meshBasicMaterial color="black" /> */}
+      {/* </mesh> */}
 
       {/* <CapsuleCollider args={[1, 0.5]} ref={collider} /> */}
       <CuboidCollider args={[0.25, 0.5, 0.15]} ref={collider} />
     </RigidBody>
   );
 };
+
+const CharacterModel = forwardRef((props, ref) => {
+  const { nodes, materials } = useGLTF("/character.glb");
+  // const finalColor = "lightblue";
+
+  const cloth = useRef();
+
+  useEffect(() => {
+    const unsub = subscribeKey(characterState, "activeColor", () => {
+      console.log("color change");
+
+      if (cloth.current) {
+        cloth.current.material.color.set(characterState.activeColor);
+      }
+    });
+
+    return () => {
+      unsub();
+    };
+  }, []);
+
+  return (
+    <group ref={ref} name="character" dispose={null} scale={0.4} {...props}>
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.Sphere.geometry}
+        // material={nodes.Sphere.material}
+        position={[0, 1.11, 0]}
+        scale={0.42}
+      >
+        <meshBasicMaterial color={"black"} />
+
+        <Edges scale={1} renderOrder={1}>
+          <meshBasicMaterial color="#555" />
+        </Edges>
+      </mesh>
+      <mesh
+        ref={cloth}
+        castShadow
+        receiveShadow
+        geometry={nodes.Plane.geometry}
+        // material={nodes.Plane.material}
+        position={[0, 1.04, 0]}
+        scale={2.14}
+      >
+        <meshBasicMaterial />
+
+        <Edges scale={1} renderOrder={1}>
+          <meshBasicMaterial color="#555" />
+        </Edges>
+      </mesh>
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.Cone.geometry}
+        // material={nodes.Cone.material}
+        position={[0.13, 2.1, 0]}
+        rotation={[0, 0, -0.14]}
+        scale={[0.4, 0.72, 0.4]}
+      >
+        <meshBasicMaterial color={"white"} />
+
+        <Edges scale={1} renderOrder={1}>
+          <meshBasicMaterial color="#555" />
+        </Edges>
+      </mesh>
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.Cylinder.geometry}
+        // material={nodes.Cylinder.material}
+        position={[-0.31, 1.08, 0]}
+        rotation={[0, 0, 1.63]}
+        scale={[0.04, 0.2, 0.04]}
+      >
+        <meshBasicMaterial color={"black"} />
+
+        <Edges scale={1} renderOrder={1}>
+          <meshBasicMaterial color="#555" />
+        </Edges>
+      </mesh>
+    </group>
+  );
+});
+
+CharacterModel.displayName = "CharacterModel";
 
 const directionOffsetFn = (keysPressed) => {
   let directionOffset = 0; // w

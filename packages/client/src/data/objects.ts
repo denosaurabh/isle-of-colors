@@ -3,7 +3,7 @@ import { nanoid } from "nanoid";
 export const OBJECTS_DATA = [
   {
     id: nanoid(),
-    name: "Cabin",
+    name: "Flat",
     url: "https://nftstorage.link/ipfs/bafybeifgjajcpzidi75eq4w2gpegmtn5zz3z3tamw4xphdgx5kygkoaedy",
   },
   {
@@ -14,7 +14,7 @@ export const OBJECTS_DATA = [
   },
   {
     id: nanoid(),
-    name: "Hut2",
+    name: "Hut #2",
     url: "/hut2.glb",
   },
   {
@@ -29,12 +29,12 @@ export const OBJECTS_DATA = [
   },
   {
     id: nanoid(),
-    name: "Plants2",
+    name: "Plants #2",
     url: "/plants2.glb",
   },
   {
     id: nanoid(),
-    name: "Potted Plant",
+    name: "Pot",
     url: "/pottedplant.glb",
   },
 ];
