@@ -3,7 +3,6 @@ import { PlayersState, playersState } from "../state/players";
 import { memo, useEffect } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import { Vector3 } from "three";
-import { CharacterModel } from "./Character";
 
 const getPlayerMeshName = (name: string) => `player-${name}`;
 
@@ -37,7 +36,7 @@ export const Players = () => {
         if (playerObj) {
           // console.log("lerping pos");
           playerObj.position.lerp(
-            pos.set(p.position[0], p.position[1] + 0.6, p.position[2]),
+            pos.set(p.position[0], p.position[1], p.position[2]),
             delta
           );
         }
@@ -56,14 +55,6 @@ const PlayersMap = memo(
     return (
       <>
         {players.map((p, i) => {
-          return (
-            <CharacterModel
-              key={i}
-              name={getPlayerMeshName(p.name)}
-              position-y={0.6}
-            />
-          );
-
           return (
             <mesh
               key={i}
