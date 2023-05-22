@@ -21,7 +21,7 @@ export const ActionsPicker = () => {
   return (
     <div className="w-fit h-fit p-2 rounded-lg bg-slate-800 bg-opacity-25 backdrop-blur-md">
       <ToggleGroup.Root
-        className="inline-flex bg-mauve6 rounded shadow-[0_2px_10px] shadow-blackA7 space-x-px"
+        className="inline-flex rounded space-x-px"
         type="single"
         defaultValue="paint"
         value={activeActionMode}
@@ -48,4 +48,4 @@ export const ActionsPicker = () => {
 };
 
 const toggleGroupItemClasses =
-  "hover:bg-slate-200 color-mauve11 data-[state=on]:bg-slate-600 data-[state=on]:text-slate-100 flex h-[35px] w-fit px-3 items-center justify-center bg-white text-base leading-4 first:rounded-l last:rounded-r focus:z-10 focus:shadow-[0_0_0_2px] focus:shadow-black focus:outline-none";
+  "bg-transparent text-slate-900 hover:bg-slate-200 color-slate-900 data-[state=on]:bg-slate-100 data-[state=on]:text-slate-900 flex h-[35px] w-fit px-3 items-center justify-center text-base leading-4 rounded-md focus:z-10 focus:shadow-[0_0_0_2px] focus:shadow-black focus:outline-none";
