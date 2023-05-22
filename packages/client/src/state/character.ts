@@ -44,6 +44,7 @@ export const characterState = proxy<CharacterState>({
     pink: 50,
     orange: 1000,
     // voilet: 1000,
+    green: 1000,
     white: 1000,
     purple: 1000,
   },
