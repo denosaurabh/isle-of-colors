@@ -17,4 +17,24 @@ export const OBJECTS_DATA = [
     name: "Hut2",
     url: "/hut2.glb",
   },
+  {
+    id: nanoid(),
+    name: "Rocks",
+    url: "/rocks.glb",
+  },
+  {
+    id: nanoid(),
+    name: "Plants",
+    url: "/plants.glb",
+  },
+  {
+    id: nanoid(),
+    name: "Plants2",
+    url: "/plants2.glb",
+  },
+  {
+    id: nanoid(),
+    name: "Potted Plant",
+    url: "/pottedplant.glb",
+  },
 ];
