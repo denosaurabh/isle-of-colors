@@ -10,6 +10,8 @@ type ModelProps = {
   id: string;
   color?: string;
 
+  noPaintAndScoopAllowed?: boolean;
+
   structures?: Record<string, string>;
 
   onStructureFocusIn?: (meshName: string, currentColor: string) => void;
@@ -26,6 +28,7 @@ export const Model = memo(
     structures = {},
     onStructureFocusIn,
     onStructureFocusOut,
+    noPaintAndScoopAllowed = false,
     ...props
   }: ModelProps) => {
     const { userData, ...otherProps } = props;
@@ -73,14 +76,20 @@ export const Model = memo(
                 scale={n.scale}
                 onPointerDown={(e) => {
                   e.stopPropagation();
+                  if (noPaintAndScoopAllowed) return;
+
                   onStructureFocusIn?.(meshName, finalColor);
                 }}
                 onPointerUp={(e) => {
                   e.stopPropagation();
+                  if (noPaintAndScoopAllowed) return;
+
                   onStructureFocusOut?.(meshName);
                 }}
                 onPointerLeave={(e) => {
                   e.stopPropagation();
+                  if (noPaintAndScoopAllowed) return;
+
                   // console.log("pointer leave");
                   onStructureFocusOut?.(meshName);
                 }}

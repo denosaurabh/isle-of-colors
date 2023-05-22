@@ -8,6 +8,7 @@ import { UI } from "./ui";
 
 import { Perf } from "r3f-perf";
 import { Effects } from "./components/Effects";
+import { Loading } from "./ui/Loading";
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   // const {
@@ -36,17 +37,17 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
           { name: "jump", keys: ["Space"] },
         ]}
       >
-        <Canvas
-          id="canvas"
-          shadows
-          orthographic
-          camera={{ position: [10, 10, 10], zoom: 50, near: 0.0, far: 150 }}
-        >
-          <Perf position="top-left" />
+        <Suspense fallback={<Loading />}>
+          <Canvas
+            id="canvas"
+            shadows
+            orthographic
+            camera={{ position: [10, 10, 10], zoom: 50, near: 0.0, far: 150 }}
+          >
+            <Perf position="top-left" />
 
-          <color attach="background" args={["#d0d0d0"]} />
+            <color attach="background" args={["#d0d0d0"]} />
 
-          <Suspense>
             <Physics gravity={[0, -9.8, 0]}>
               {children}
 
@@ -54,8 +55,8 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
 
               <Effects />
             </Physics>
-          </Suspense>
-        </Canvas>
+          </Canvas>
+        </Suspense>
       </KeyboardControls>
     </div>
   );

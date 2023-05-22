@@ -1,9 +1,12 @@
+import { nanoid } from "nanoid";
+
 import { useFrame } from "@react-three/fiber";
 import { TreeSpirit } from "./TreeSpirit";
 import { useRef } from "react";
 import { Vector3 } from "three";
 import { addColorInInventory, characterState } from "../state/character";
 import { worldState } from "../state/world";
+import { Model } from "./Model";
 
 const charPos = new Vector3();
 
@@ -33,7 +36,10 @@ export const Forest = () => {
       position={[30, 0, 30]}
       userData={{ color: "orange" }}
     >
-      <TreeSpirit color="orange" name="tree-spirit" />
+      {/* <TreeSpirit color="orange" name="tree-spirit" /> */}
+
+      <Model id={nanoid()} url="/plants.glb" />
+      <Model id={nanoid()} url="/rocks.glb" />
     </group>
   );
 };
