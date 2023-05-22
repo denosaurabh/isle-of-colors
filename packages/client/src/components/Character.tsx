@@ -205,7 +205,10 @@ export const Character = () => {
       ref={body}
       position={[0, 0.6, 0]}
     >
-      <CharacterModel ref={characterRef} />
+      <CharacterModel
+        ref={characterRef}
+        // paintCloth
+      />
 
       {/* <mesh name="character" ref={characterRef}> */}
       {/* <boxGeometry args={[0.5, 1, 0.3]} /> */}
@@ -218,13 +221,15 @@ export const Character = () => {
   );
 };
 
-const CharacterModel = forwardRef((props, ref) => {
+export const CharacterModel = forwardRef((props, ref) => {
   const { nodes, materials } = useGLTF("/character.glb");
   // const finalColor = "lightblue";
 
   const cloth = useRef();
 
   useEffect(() => {
+    if (!props.paintCloth) return;
+
     const unsub = subscribeKey(characterState, "activeColor", () => {
       console.log("color change");
 
