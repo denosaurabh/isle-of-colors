@@ -64,7 +64,7 @@ export const DraftObjects = () => {
           });
 
           console.log("r", object.rotation.y.toFixed(4));
-          updateDraftObjectRotation(d.id, object.rotation.y.toFixed(4));
+          updateDraftObjectRotation(d.id, object.rotation.y.toFixed(8));
         });
 
         control.showY = false;
@@ -121,6 +121,8 @@ export const DraftObjects = () => {
               id={getDraftObjectId(dobj.id)}
               url={dobj.objectData.url}
               color="#fff"
+              // position-x={dobj.x}
+              // position-z={dobj.z}
               // name={getDraftObjectId(dobj.id)}
               onClick={(e) => {
                 e.stopPropagation();

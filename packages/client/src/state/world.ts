@@ -1,6 +1,6 @@
 import { proxy } from "valtio";
 
-export const DAY_NIGHT_CYCLE_SECONDS = 100;
+export const DAY_NIGHT_CYCLE_SECONDS = 60 * 3;
 
 type WorldState = {
   numberOfOnlineCharacters: number;

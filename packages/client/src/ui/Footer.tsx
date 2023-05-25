@@ -23,28 +23,26 @@ export const Footer = () => {
   const { numberOfOnlineCharacters, isChainReady } = useSnapshot(worldState);
   const allBuildingsIds = useEntityQuery([Has(Buildings)]);
 
-  const hasFetched = useRef(false)
+  const hasFetched = useRef(false);
   useEffect(() => {
     if (isChainReady && !hasFetched.current) {
-
       // console.log("allBuildingsIds", allBuildingsIds);
       const newWorldObjects = allBuildingsIds.map((id) => {
         const loadedBuildingsData = getComponentValueStrict(Buildings, id);
         // console.log("loadedBuildingsData", loadedBuildingsDataw);
 
-        let names = loadedBuildingsData["structuresName"].split(',');
-        let colors = loadedBuildingsData["structuresColor"].split(',');
+        const names = loadedBuildingsData["structuresName"].split(",");
+        const colors = loadedBuildingsData["structuresColor"].split(",");
 
         if (names.length !== colors.length) {
-            throw new Error('Lists have different lengths');
+          throw new Error("Lists have different lengths");
         }
 
-        let structuresObject = {};
+        const structuresObject = {};
 
-        for (var i = 0; i < names.length; i++) {
+        for (let i = 0; i < names.length; i++) {
           structuresObject[names[i]] = colors[i];
         }
-
 
         const objectData: WorldObject = {
           id: id,
@@ -62,7 +60,7 @@ export const Footer = () => {
 
       addWorldObjects(newWorldObjects);
 
-      hasFetched.current = true
+      hasFetched.current = true;
     }
   }, [allBuildingsIds]);
 
@@ -74,7 +72,6 @@ export const Footer = () => {
 
     const savedObjects = JSON.parse(JSON.stringify({ a: savedObjectsProxy }));
 
-    
     // // console.log("savedObjects", savedObjects.a); // id, url, ower address, rotaton, x, z, ( color list empty , amount list empty)
 
     savedObjects.a.forEach((obj: any) => {

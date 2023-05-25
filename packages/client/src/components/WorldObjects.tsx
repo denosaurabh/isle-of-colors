@@ -30,14 +30,16 @@ export const WorldObjects = () => {
 
   const allBuildingsIds = useEntityQuery([Has(Buildings)]);
 
-
   const onStructureFocusIn = (structureName: string, currentColor: string) => {
     setGlobalCursor("pointer");
     startPaintingStructure(structureName, currentColor);
   };
 
-  const onStructureFocusOut = (structureName: string, obj: WorldObject['id']) => {
-    if (!characterState.paintingState[structureName]?.isPainting) return
+  const onStructureFocusOut = (
+    structureName: string,
+    obj: WorldObject["id"]
+  ) => {
+    if (!characterState.paintingState[structureName]?.isPainting) return;
 
     stopPaintingStructure(structureName);
     setGlobalCursor("auto");
@@ -48,44 +50,48 @@ export const WorldObjects = () => {
     // console.log("updatedObj", updatedObj);
     // console.log("allBuildingsIds", allBuildingsIds);
 
-    for (let i in allBuildingsIds) {
+    for (const i in allBuildingsIds) {
       // console.log("buildingId", buildingId);
-      let buildingId = allBuildingsIds[i];
+      const buildingId = allBuildingsIds[i];
 
-    // console.log("ascii", buildingId, updatedObj['id']);
-    // console.log("buildingId", buildingId, updatedObj['id']);
+      // console.log("ascii", buildingId, updatedObj['id']);
+      // console.log("buildingId", buildingId, updatedObj['id']);
 
-    if (buildingId == updatedObj['id']) {
-    // console.log("updatedObj", updatedObj['structures']);
-    // console.log("updatedObj", updatedObj['id'], Object.keys(updatedObj['structures']).join(","));
+      if (buildingId == updatedObj["id"]) {
+        // console.log("updatedObj", updatedObj['structures']);
+        // console.log("updatedObj", updatedObj['id'], Object.keys(updatedObj['structures']).join(","));
 
-      let hexParts = buildingId.match(/.{1,2}/g);
-      // console.log("hexParts", hexParts);
-      let ascii = hexParts.map(function(hexPart) {
-        let charCode = parseInt(hexPart, 16);
-          // ignore non-printable characters and padding zeroes
-          if (charCode > 31 && charCode != 127) {
+        const hexParts = buildingId.match(/.{1,2}/g);
+        // console.log("hexParts", hexParts);
+        const ascii = hexParts
+          .map(function (hexPart) {
+            const charCode = parseInt(hexPart, 16);
+            // ignore non-printable characters and padding zeroes
+            if (charCode > 31 && charCode != 127) {
               return String.fromCharCode(charCode);
-          } else {
-              return '';
-          }
-      }).join('');
+            } else {
+              return "";
+            }
+          })
+          .join("");
 
-    updateBuildingsMud(
-        // buildingId,
-        ascii,
-        Object.keys(updatedObj['structures']).join(","),
-        Object.values(updatedObj['structures']).join(",")
-        // "this"
+        updateBuildingsMud(
+          // buildingId,
+          ascii,
+          Object.keys(updatedObj["structures"]).join(","),
+          Object.values(updatedObj["structures"]).join(",")
+          // "this"
         );
+      }
     }
-  }
   };
 
   return (
     <>
       {Object.values(closestObjects).map((obj, i) => {
-if (!obj.modelUrl) return null
+        if (!obj.modelUrl) return null;
+
+        console.log("obj", obj);
 
         return (
           <WorldModel
